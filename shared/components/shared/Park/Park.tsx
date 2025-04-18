@@ -1,49 +1,118 @@
 "use client";
 import { ParkElements } from "@/@types/enums";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import roadIcon from "@/public/images/road.svg";
 import decorIcon from "@/public/images/decor.svg";
 import parkingIcon from "@/public/images/parking.svg";
 import { ParkElementButton } from "../../ui/ParkElementButton";
+import { useReduxStates } from "@/shared/redux/hooks/useReduxStates";
+import calculateCellStyle from "@/lib/utils/calculateCellStyle";
 import { useActions } from "@/shared/redux/hooks/useActions";
 
-interface ParkProps {
-    columns: number;
-    rows: number;
-}
+interface ParkProps {}
 
-const Park: React.FC<ParkProps> = ({ columns, rows }) => {
-    const [cells, setCells] = useState<ParkElements[][]>(
-        [...Array(rows)].map((element, index) => {
-            return [...Array(columns)].map(() => {
-                return ParkElements.EMPTY;
-            });
-        })
-    );
+const Park: React.FC<ParkProps> = () => {
+    const { topology } = useReduxStates();
+    const { setTopologyCells } = useActions();
+    // console.log(topology.cells)
+
+    const height = topology.height;
+    const width = topology.width;
+    const condition =
+        width &&
+        height &&
+        width >= 4 &&
+        height >= 4 &&
+        width <= 6 &&
+        height <= 6;
+
+    const [cells, setCells] = useState<ParkElements[][]>(topology.cells);
     const [active, setActive] = useState<ParkElements>(ParkElements.D);
 
-    const maxBlockSizeWithoutPaddingsAndGaps = 800;
+    useEffect(() => {
+        if (condition) {
+            console.log(`aaa`);
+            const supportArray = cells.map((row) => [...row]);
+            if (cells[0] && width > cells[0].length) {
+                console.log(`1`);
+                for (let k = 0; k < width - cells[0].length; k++) {
+                    for (let i = 0; i < supportArray.length; i++) {
+                        supportArray[i].push(ParkElements.R);
+                    }
+                }
+                setCells(supportArray);
+            } else if (cells[0] && width < cells[0].length) {
+                for (let k = 0; k < cells[0].length - width; k++) {
+                    for (let i = 0; i < supportArray.length; i++) {
+                        supportArray[i].pop();
+                    }
+                }
+                console.log(`2`);
+                setCells(supportArray);
+            } else if (cells.length > 0 && height < cells.length) {
+                console.log(`3`);
+                setCells([
+                    ...supportArray.slice(
+                        0,
+                        cells.length - (cells.length - height)
+                    ),
+                ]);
+                console.log([
+                    ...supportArray.slice(
+                        0,
+                        cells.length - (cells.length - height)
+                    ),
+                ]);
+            } else if (cells.length > 0 && height > cells.length) {
+                console.log(`4`);
 
-    const cellStyle = {
-        gridTemplateColumns: `repeat(${columns},${Math.ceil(
-            maxBlockSizeWithoutPaddingsAndGaps / columns
-        )}px)`,
-        gridTemplateRows: `repeat(${rows},${Math.ceil(
-            maxBlockSizeWithoutPaddingsAndGaps / columns
-        )}px)`,
-    };
+                const fooArray = Array.from(
+                    { length: height - cells.length },
+                    () => Array.from({ length: width }, () => ParkElements.R)
+                );
+                setCells([...cells, ...fooArray]);
+            } else if (
+                cells.length &&
+                cells[0] &&
+                cells.length === Number(height) &&
+                cells[0].length === Number(width)
+            ) {
+                console.log(`5`);
+                setCells(cells);
+            } else {
+                console.log(`6`);
 
-    const {} = useActions()
+                setCells(
+                    Array.from({ length: width }, () =>
+                        Array.from({ length: height }, () => ParkElements.R)
+                    )
+                );
+            }
+        } else {
+            console.log(`отдельно`);
+            console.log(cells);
+
+            // setCells(topology.cells);
+            setCells(cells);
+        }
+    }, [width, height]);
+
+    const cellStyle = condition
+        ? calculateCellStyle(height, width)
+        : cells.length > 0
+        ? calculateCellStyle(cells.length, cells[0].length)
+        : {};
+
     return (
         <div
-            className="bg-[#000]/30 backdrop-blur-3xl rounded-4xl p-6 shadow-[0px_0px_1px_1px_rgba(255,255,255,0.25)] 
+            className="bg-[#000]/20 backdrop-blur-3xl rounded-4xl p-6 shadow-[0px_0px_1px_1px_rgba(255,255,255,0.25)] 
         inset-shadow-[0px_0px_20px_2px_rgba(255,255,255,0.25)]"
         >
-
             <div
-                className="flex gap-5 mb-5 bg-white/30 p-2.5 pl-4 rounded-full shadow-[0px_3px_4px_0px_rgba(0,0,0,0.1)] 
-            inset-shadow-[0px_0px_15px_10px_rgba(255,255,255,0.25)]"
+                className="flex gap-5 mb-5 bg-white/30 p-2.5 pl-4 rounded-full shadow-[0px_3px_8px_0px_rgba(0,0,0,0.20)] 
+            inset-shadow-[0px_0px_10px_7px_rgba(255,255,255,0.25)]
+            "
             >
                 <ParkElementButton
                     setActive={setActive}
@@ -69,18 +138,20 @@ const Park: React.FC<ParkProps> = ({ columns, rows }) => {
             </div>
             <div
                 style={cellStyle}
-                className={`grid max-w-[860px] max-h-[1000px] w-full h-full gap-1.5`}
+                className={`grid w-[840px] max-h-[1300px] min-h-[600px]  gap-1.5`}
             >
                 {cells.map((element1, index1) =>
                     element1.map((element2, index2) => (
                         <button
                             className="cursor-pointer shadow-[0px_3px_4px_0px_rgba(0,0,0,0.25)] bg-black/30 flex justify-center
-                             items-center rounded-xl inset-shadow-[0px_0px_4px_0.1px_rgba(255,255,255,0.1)]"
+                             items-center rounded-xl inset-shadow-[0px_0px_4px_0.1px_rgba(255,255,255,0.1)] transition delay-50 duration-300 ease-in-out
+                             hover:inset-shadow-[0px_0px_40px_0.1px_rgba(255,255,255,0.1)] hover:-translate-y-0.5 "
                             key={index2}
                             onClick={() => {
-                                const a = cells.map((e) => e);
+                                const a = cells.map((row) => [...row]);
                                 a[index1][index2] = active;
                                 setCells(a);
+                                setTopologyCells(a);
                             }}
                         >
                             {element2 === ParkElements.D ? (

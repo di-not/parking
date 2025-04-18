@@ -18,9 +18,7 @@ const ParkElementButton: React.FC<ParkElementButtonType> = ({
     return (
         <button
             className="w-[50px] h-[50px]"
-            onClick={() => {
-                setActive(parkElement);
-            }}
+            onClick={() => setActive(parkElement)}
         >
             <Image
                 width={50}
@@ -33,4 +31,4 @@ const ParkElementButton: React.FC<ParkElementButtonType> = ({
         </button>
     );
 };
-export {ParkElementButton}
+export { ParkElementButton };
