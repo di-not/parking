@@ -1,6 +1,6 @@
 "use client";
 import { TopologyType } from "@/@types/topologyType";
-import { SubmitHandler, useForm, UseFormReturn } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import {
     Select,
     SelectContent,
@@ -13,25 +13,28 @@ import {
 import { useActions } from "@/shared/redux/hooks/useActions";
 import { useEffect } from "react";
 import { useReduxStates } from "@/shared/redux/hooks/useReduxStates";
+import { Primaryinput } from "../Primaryinput";
 
 interface InformationFormProps {}
 
 type InformationFormType = Omit<TopologyType, "cells">;
 
 const InformationForm: React.FC<InformationFormProps> = () => {
+    //Функции стейт менджера
     const { topology } = useReduxStates();
     const { setTopologyWithoutCells } = useActions();
-    const { cells, ...obj } = topology;
+
+    //Регистрация формы и заполнение начальными значениями
+    const { cells, ...topologyWithoutCells } = topology;
     const formStates = useForm<InformationFormType>({
-        defaultValues: obj,
+        defaultValues: topologyWithoutCells,
     });
-
-    const onSubmit: SubmitHandler<InformationFormType> = (data) =>
-        setTopologyWithoutCells(data);
-
     useEffect(() => {
         setTopologyWithoutCells(formStates.getValues());
     }, [formStates.watch()]);
+
+    const onSubmit: SubmitHandler<InformationFormType> = (data) =>
+        setTopologyWithoutCells(data);
 
     return (
         <div className="mt-9 h-[calc(100%_-_65px)]">
@@ -58,7 +61,6 @@ const InformationForm: React.FC<InformationFormProps> = () => {
                     placeholder="Длина"
                     type={"number"}
                 />
-
                 <Primaryinput
                     register={formStates.register("height", {
                         required: true,
@@ -127,25 +129,3 @@ const InformationForm: React.FC<InformationFormProps> = () => {
     );
 };
 export { InformationForm };
-
-export type PrimaryinputType = {
-    register: any;
-    type?: "number" | "text";
-    placeholder?: string;
-};
-const Primaryinput: React.FC<PrimaryinputType> = ({
-    register,
-    placeholder,
-    type,
-}) => {
-    return (
-        <div className="">
-            <input
-                {...register}
-                type={type ? type : "text"}
-                className="text-white shadow-[0px_3px_4px_0px_rgba(0,0,0,0.25)] inset-shadow-[0px_0px_5px_0.1px_rgba(255,255,255,0.1)] p-2.5 pl-5 pr-14 w-full text-[16px] font-medium bg-black/30 rounded-full placeholder:text-white/50 text-lg focus:outline-1 outline-[#fff]/30 outline-offset-0"
-                placeholder={placeholder ? placeholder : ""}
-            />
-        </div>
-    );
-};
