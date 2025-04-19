@@ -7,11 +7,13 @@ import {
     setTopologyWithoutCells,
     setTopologyCells,
 } from "../slices/topology.slice";
+import { setSearch } from "../slices/searchParams.slice";
 
 const rootActions = {
     setTopology,
     setTopologyWithoutCells,
     setTopologyCells,
+    setSearch,
 };
 
 export const useActions = () => {

@@ -17,7 +17,8 @@ const Park: React.FC<ParkProps> = () => {
     //Функции стейт менджера
     const { topology } = useReduxStates();
     const { setTopologyCells } = useActions();
-
+    
+    
     //Константы
     const height = topology.height;
     const width = topology.width;
@@ -39,7 +40,7 @@ const Park: React.FC<ParkProps> = () => {
         : cells.length > 0
         ? calculateCellStyle(cells.length, cells[0].length)
         : {};
-
+console.log(cells)
     return (
         <div
             className="bg-[#000]/20 backdrop-blur-3xl rounded-4xl p-6 shadow-[0px_0px_1px_1px_rgba(255,255,255,0.25)] 
@@ -74,7 +75,7 @@ const Park: React.FC<ParkProps> = () => {
             </div>
             <div
                 style={cellStyle}
-                className={`grid w-[840px] max-h-[1300px] min-h-[600px]  gap-1.5`}
+                className={`grid w-[840px] max-h-[1300px] min-h-[600px] justify-center  gap-1.5`}
             >
                 {cells.map((element1, index1) =>
                     element1.map((element2, index2) => (

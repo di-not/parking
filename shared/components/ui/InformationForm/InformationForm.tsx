@@ -40,7 +40,7 @@ const InformationForm: React.FC<InformationFormProps> = () => {
         <div className="mt-9 h-[calc(100%_-_65px)]">
             <form
                 onSubmit={formStates.handleSubmit(onSubmit)}
-                className="flex flex-col gap-4  top-[40px] sticky"
+                className="flex flex-col gap-4  "
             >
                 <Primaryinput
                     register={formStates.register("name", { required: true })}
