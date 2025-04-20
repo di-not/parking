@@ -44,7 +44,7 @@ console.log(cells)
     return (
         <div
             className="bg-[#000]/20 backdrop-blur-3xl rounded-4xl p-6 shadow-[0px_0px_1px_1px_rgba(255,255,255,0.25)] 
-        inset-shadow-[0px_0px_20px_2px_rgba(255,255,255,0.25)]"
+        inset-shadow-[0px_0px_20px_2px_rgba(255,255,255,0.25)] "
         >
             <div
                 className="flex gap-5 mb-5 bg-white/30 p-2.5 pl-4 rounded-full shadow-[0px_3px_8px_0px_rgba(0,0,0,0.20)] 

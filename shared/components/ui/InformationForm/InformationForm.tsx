@@ -91,7 +91,7 @@ const InformationForm: React.FC<InformationFormProps> = () => {
                 <Select>
                     <SelectTrigger
                         className="flex justify-between font-medium items-center shadow-[0px_3px_4px_0px_rgba(0,0,0,0.25)] p-[11px] pl-5 pr-6 w-full bg-black/30   
-                    inset-shadow-[0px_0px_5px_0.1px_rgba(255,255,255,0.1)]
+                    inset-shadow-[0px_0px_12px_2px_rgba(255,255,255,0.25)]
                     rounded-full text-white text-[16px] focus:outline-1! outline-[#fff]/30! outline-offset-0! "
                     >
                         <SelectValue placeholder="Менеджер" />
