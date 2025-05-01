@@ -4,3 +4,8 @@ export enum ParkElements {
     P = "park",
     EMPTY = 'empty'
 }
+export enum Statuses{
+    SUCCESS = 'fulfilled',
+    ERROR = 'rejected',
+    LOADING = 'loading'
+} 

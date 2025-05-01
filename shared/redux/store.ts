@@ -1,6 +1,7 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import topologySlice from "./slices/topology.slice";
 import searchParamsSlice from "./slices/searchParams.slice";
+import parkingsSlice from "./slices/parkings.slice";
 import {
     persistStore,
     persistReducer,
@@ -16,6 +17,7 @@ import storage from "redux-persist/lib/storage";
 const rootReducer = combineReducers({
     search: searchParamsSlice,
     topology: topologySlice,
+    parkings:parkingsSlice
 });
 
 const persistConfig = {
