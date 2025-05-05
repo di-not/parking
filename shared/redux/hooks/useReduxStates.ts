@@ -5,9 +5,25 @@ export const useReduxStates = () => {
     const topology = useSelector((state: RootState) => state.topology);
     const searchValue = useSelector((state: RootState) => state.search);
 
-    const parkingStatus = useSelector((state: RootState) => state.parkings.status);
-    const parkingArray = useSelector((state: RootState) => state.parkings.parkingArray);
+    const parkingStatus = useSelector(
+        (state: RootState) => state.parkings.status
+    );
+    const parkingArray = useSelector(
+        (state: RootState) => state.parkings.parkingArray
+    );
+
+    const isAuthenticated = useSelector(
+        (state: RootState) => state.auth.isAuthenticated
+    );
+    const role = useSelector((state: RootState) => state.auth.role);
     // const parkingNext = useSelector((state: RootState) => state.parkings);
 
-    return { topology, searchValue, parkingArray, parkingStatus };
+    return {
+        topology,
+        searchValue,
+        parkingArray,
+        parkingStatus,
+        role,
+        isAuthenticated,
+    };
 };

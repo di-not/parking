@@ -1,41 +1,19 @@
-"use client";
-import $api from "@/http";
-import { Header } from "@/shared/components/shared/Header";
+'use client'
 import { ListSearch } from "@/shared/components/ui/ListSearch";
 import { useActions } from "@/shared/redux/hooks/useActions";
 import { useReduxStates } from "@/shared/redux/hooks/useReduxStates";
+import { useState } from "react";
 
-import { useEffect, useState } from "react";
-
-import { getCookie, setCookie } from "cookies-next";
-import { NextApiRequest, NextApiResponse } from "next";
-import { Statuses } from "@/@types/enums";
-import { redirect } from "next/navigation";
-export default function Home() {
-    return (
-        <div className="w-full">
-            <Header />
-            <Foo />
-        </div>
-    );
-}
-
-// На клиенте
-export function ClientComponent() {}
-
-const Foo = () => {
+const IndexPage: React.FC= () => {
     const { fetchParkings } = useActions();
     const [page, setPage] = useState(0);
 
-    //Функции стейт менеджера
+    // Функции стейт менеджера
     const { parkingStatus, parkingArray, searchValue } = useReduxStates();
 
-    
     // useEffect(() => {
     //     setPage(0);
     // }, [search]);
-
-    
 
     return (
         <div className="container">
@@ -64,8 +42,9 @@ const Foo = () => {
                     setPage(page + 1);
                 }}
             >
-                sssssssss
+                ещё
             </button>
         </div>
     );
 };
+export default IndexPage;

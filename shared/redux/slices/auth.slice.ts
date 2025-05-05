@@ -1,37 +1,28 @@
-import { Statuses } from "@/@types/enums";
-import { setCookie, deleteCookie } from "cookies-next";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-
-interface AuthState {
-    user: User | null;
-}
-
-export interface User {
-    id: String;
-    name: string;
-    email: string | null;
-    role: Roles;
-}
+type SearchType = {
+    isAuthenticated: boolean;
+    role: Roles | null;
+};
 export enum Roles {
-    ADMIN,
-    MANAGER,
+    ADMIN = 'admin',
+    MANAGER = 'manager',
 }
-
-const initialState: AuthState = {
-    user: null,
+const initialState: SearchType = {
+    isAuthenticated: false,
+    role: null,
 };
 
 const authSlice = createSlice({
     name: "auth",
     initialState,
     reducers: {
-        setUser(state, action: PayloadAction<User | null>) {
-            state.user = action.payload;
+        setAuth: (state, { payload }: PayloadAction<boolean>) => {
+            state.isAuthenticated = payload;
         },
-        deleteUser(state) {
-            state.user = null;
+        setRole: (state, { payload }: PayloadAction<Roles | null>) => {
+            state.role = payload;
         },
     },
 });
-export const { setUser, deleteUser } = authSlice.actions;
+export const { setAuth,setRole } = authSlice.actions;
 export default authSlice.reducer;

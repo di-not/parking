@@ -1,6 +1,7 @@
 "use client";
 import { authService } from "@/services/authService";
 import { Primaryinput } from "@/shared/components/ui/Primaryinput";
+import { useActions } from "@/shared/redux/hooks/useActions";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -8,12 +9,18 @@ import { SubmitHandler, useForm } from "react-hook-form";
 export default function Login() {
     const form = useForm<{ password: string; login: string }>();
 
+    const { setAuth, setRole } = useActions();
+
     const onSubmit: SubmitHandler<{ password: string; login: string }> = async (
         data
     ) => {
         const auth = await authService.logIn(data.login, data.password);
-        if(auth?.status === 202){
-            redirect('/admin')
+        console.log(auth)
+        
+        if (auth) {
+            setAuth(true)
+            setRole(auth.role)
+            redirect("/admin");            
         }
     };
 
