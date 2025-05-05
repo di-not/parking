@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "next dev --turbopack -p 3001",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -11,10 +11,11 @@
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.7",
     "@radix-ui/react-select": "^2.1.7",
-    "@reduxjs/toolkit": "^2.6.1",
-    "axios": "^1.8.4",
+    "@reduxjs/toolkit": "^2.7.0",
+    "axios": "^1.9.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "cookies-next": "^5.1.0",
     "lucide-react": "^0.488.0",
     "next": "15.3.0",
     "react": "^19.0.0",

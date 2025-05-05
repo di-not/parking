@@ -6,14 +6,20 @@ import { ReactNode } from "react";
 interface HeaderProps {}
 const Header: React.FC<HeaderProps> = ({}) => {
     return (
-        <div
-            className="flex w-full gap-8 justify-between bg-[#000]/20 backdrop-blur-3xl rounded-4xl p-6 
+        <div className="mt-6">
+            <div className="container">
+                <div
+                    className="flex w-full gap-8 justify-between bg-[#000]/20 backdrop-blur-3xl rounded-4xl p-6 
                     shadow-[0px_0px_1px_1px_rgba(255,255,255,0.25)] 
                 inset-shadow-[0px_0px_20px_2px_rgba(255,255,255,0.25)] "
-        >
-            <LocalLink href={"/create"}>Создать парковку</LocalLink>
-            <Search />
-            <LocalLink href={"/create_manager"}>Работа с менеджерами</LocalLink>
+                >
+                    <LocalLink href={"admin/create"}>Создать парковку</LocalLink>
+                    <Search />
+                    <LocalLink href={"admin/create_manager"}>
+                        Работа с менеджерами
+                    </LocalLink>
+                </div>
+            </div>
         </div>
     );
 };

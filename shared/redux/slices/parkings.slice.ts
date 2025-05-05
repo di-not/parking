@@ -22,10 +22,25 @@ export const fetchParkings = createAsyncThunk(
         const { page, search } = params;
         let res:AxiosResponse<ParkingArrayType> | null = null
         if(search){
-            res = await $api.get<ParkingArrayType>('places')
+            // res = await fetch("http://localhost:8000/parking", {
+            //     method: "GET",
+            //     mode: "no-cors",
+            //     headers: {
+            //         "Content-Type": "application/json",
+            //     },
+            //     credentials: "include",
+            // });
         }
         else{
-            res = await $api.get<ParkingArrayType>('places')
+            res = await $api.get<ParkingArrayType>('/parking')
+            // res = await fetch("http://localhost:8000/parking", {
+            //     method: "GET",
+            //     mode: "no-cors",
+            //     headers: {
+            //         "Content-Type": "application/json",
+            //     },
+            //     credentials: "include",
+            // });
         }
         console.log(res)
         

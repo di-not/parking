@@ -1,5 +1,3 @@
-
-
 import { useEffect } from "react";
 
 import { ParkElements, Statuses } from "@/@types/enums";
@@ -20,8 +18,6 @@ const ListSearch: React.FC<ListSearchType> = ({
     parkings,
     search,
 }) => {
-    
-    
     useEffect(() => {
         fetchFunction({
             page,
@@ -29,33 +25,32 @@ const ListSearch: React.FC<ListSearchType> = ({
         });
     }, [page]);
 
+    const successAndEmpty =
+        parkings && parkings.length === 0 && status === Statuses.SUCCESS;
+    const firstLoadingOrError =
+        (status === Statuses.LOADING || status === Statuses.ERROR) &&
+        page === 0;
     return (
         <>
-            {!(parkings.length === 0 && status ===Statuses.SUCCESS) ? (
+            {!successAndEmpty ? (
                 <>
-                    <ul className={''}>
-                        {(status ===  Statuses.LOADING  && page === 0) ||
-                        status === Statuses.ERROR ||
-                        (page === 0 &&
-                            parkings.length !== 0 &&
-                            status !== Statuses.SUCCESS)
+                    <ul className={""}>
+                        {firstLoadingOrError
                             ? [...Array(8)].map((_, index) => (
-                                  <div className="" key={index}>aboba</div>
+                                  <div className="" key={index}>
+                                      aboba
+                                  </div>
                               ))
                             : parkings.map((element, index) => (
-                                <div className="">aboba1111</div>
+                                  <div className="">aboba1111</div>
                               ))}
                     </ul>
-                    {status ===  Statuses.LOADING && (
-                        <div className={''}></div>
-                    )}
+                    {status === Statuses.LOADING && <div className={""}></div>}
                 </>
             ) : (
-                <div className={'styles.empty_block'}>
+                <div className={"styles.empty_block"}>
                     {/* <Empty /> */}
-                    <p className={''}>
-                        Ничего не найдено...
-                    </p>
+                    <p className={""}>Ничего не найдено...</p>
                 </div>
             )}
         </>
