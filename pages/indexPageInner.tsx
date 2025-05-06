@@ -14,15 +14,15 @@ const IndexPage: React.FC= () => {
     // useEffect(() => {
     //     setPage(0);
     // }, [search]);
-
+    console.log(parkingArray)
     return (
         <div className="container">
             <div
                 className="my-4 flex bg-white/30 p-3 px-8 rounded-full 
         shadow-[0px_3px_4px_0px_rgba(0,0,0,0.1)] min-w-[290px]
-    inset-shadow-[0px_0px_20px_3px_rgba(255,255,255,0.25)]"
+    inset-shadow-[0px_0px_20px_3px_rgba(255,255,255,0.25)] mb-7"
             >
-                <p className=" text-white font-semibold text-3xl">
+                <p className=" text-white font-semibold text-3xl ">
                     Все парковки
                 </p>
             </div>
@@ -37,13 +37,6 @@ const IndexPage: React.FC= () => {
             ) : (
                 <></>
             )}
-            <button
-                onClick={() => {
-                    setPage(page + 1);
-                }}
-            >
-                ещё
-            </button>
         </div>
     );
 };

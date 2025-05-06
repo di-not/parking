@@ -1,6 +1,4 @@
 import $api from "@/http";
-import { useActions } from "@/shared/redux/hooks/useActions";
-import { useReduxStates } from "@/shared/redux/hooks/useReduxStates";
 import { Roles } from "@/shared/redux/slices/auth.slice";
 
 export const authService = {

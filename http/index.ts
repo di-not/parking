@@ -1,6 +1,4 @@
 import axios from "axios";
-import { getCookie } from "cookies-next";
-import { redirect } from "next/navigation";
 export const API_URL = "http://localhost:8000";
 
 const $api = axios.create({

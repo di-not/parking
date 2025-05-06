@@ -1,14 +1,15 @@
-'use client'
+"use client";
 import { useEffect } from "react";
 
 import { ParkElements, Statuses } from "@/@types/enums";
 import { TopologyType } from "@/@types/topologyType";
+import ParkCard from "../parkCard";
 
 type ListSearchType = {
     page: number;
     status: Statuses;
     fetchFunction: Function;
-    parkings: (TopologyType & { id: number })[][];
+    parkings: (TopologyType & { id: number })[];
     search: string;
 };
 
@@ -31,19 +32,20 @@ const ListSearch: React.FC<ListSearchType> = ({
     const firstLoadingOrError =
         (status === Statuses.LOADING || status === Statuses.ERROR) &&
         page === 0;
+
     return (
         <>
             {!successAndEmpty ? (
                 <>
-                    <ul className={""}>
+                    <ul className="grid grid-cols-[repeat(4_,1fr)] justify-between gap-x-8 gap-y-6">
                         {firstLoadingOrError
                             ? [...Array(8)].map((_, index) => (
-                                  <div className="" key={index}>
+                                  <li className="" key={index}>
                                       aboba
-                                  </div>
+                                  </li>
                               ))
-                            : parkings.map((element, index) => (
-                                  <div className="">aboba1111</div>
+                            : parkings.map((element, _) => (
+                                  <ParkCard element={element} key={element.id}/>
                               ))}
                     </ul>
                     {status === Statuses.LOADING && <div className={""}></div>}

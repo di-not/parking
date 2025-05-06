@@ -15,12 +15,10 @@ export default function Login() {
         data
     ) => {
         const auth = await authService.logIn(data.login, data.password);
-        console.log(auth)
-        
         if (auth) {
-            setAuth(true)
-            setRole(auth.role)
-            redirect("/admin");            
+            setAuth(true);
+            setRole(auth.role);
+            redirect("/admin");
         }
     };
 

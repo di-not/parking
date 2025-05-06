@@ -9,7 +9,6 @@ import clearIcon from "@/public/images/clear_icon.svg";
 import searchIcon from "@/public/images/search_icon.svg";
 interface SearchProps {}
 const Search: React.FC<SearchProps> = () => {
-    
     const { searchValue } = useReduxStates();
     const { setSearch } = useActions();
     const [curSearchValue, setCurSearchValue] = useState<string>(
