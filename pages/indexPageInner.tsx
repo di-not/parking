@@ -6,7 +6,6 @@ import { useState } from "react";
 
 const IndexPage: React.FC= () => {
     const { fetchParkings } = useActions();
-    const [page, setPage] = useState(0);
 
     // Функции стейт менеджера
     const { parkingStatus, parkingArray, searchValue } = useReduxStates();
@@ -28,7 +27,6 @@ const IndexPage: React.FC= () => {
             </div>
             {searchValue ? (
                 <ListSearch
-                    page={page}
                     fetchFunction={fetchParkings}
                     search={""}
                     status={parkingStatus}

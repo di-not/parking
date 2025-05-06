@@ -1,7 +1,7 @@
 export enum ParkElements {
-    D = "decoration",
-    R = "road",
-    P = "park",
+    D = "D",
+    R = ".",
+    P = "P",
     EMPTY = 'empty'
 }
 export enum Statuses{

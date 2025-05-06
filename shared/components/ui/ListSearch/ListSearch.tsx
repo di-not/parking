@@ -6,7 +6,6 @@ import { TopologyType } from "@/@types/topologyType";
 import ParkCard from "../parkCard";
 
 type ListSearchType = {
-    page: number;
     status: Statuses;
     fetchFunction: Function;
     parkings: (TopologyType & { id: number })[];
@@ -14,7 +13,7 @@ type ListSearchType = {
 };
 
 const ListSearch: React.FC<ListSearchType> = ({
-    page,
+    
     status,
     fetchFunction,
     parkings,
@@ -22,16 +21,14 @@ const ListSearch: React.FC<ListSearchType> = ({
 }) => {
     useEffect(() => {
         fetchFunction({
-            page,
             search,
         });
-    }, [page]);
+    }, []);
 
     const successAndEmpty =
         parkings && parkings.length === 0 && status === Statuses.SUCCESS;
     const firstLoadingOrError =
-        (status === Statuses.LOADING || status === Statuses.ERROR) &&
-        page === 0;
+        (status === Statuses.LOADING || status === Statuses.ERROR) 
 
     return (
         <>
