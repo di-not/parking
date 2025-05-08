@@ -13,7 +13,6 @@ const IndexPage: React.FC= () => {
     // useEffect(() => {
     //     setPage(0);
     // }, [search]);
-    console.log(parkingArray)
     return (
         <div className="container">
             <div

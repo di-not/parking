@@ -5,9 +5,6 @@ import useFetch from "@/shared/hooks/useFetch";
 
 import ParkDisplay from "@/shared/components/shared/parkDisplay";
 import InfoDisplay from "@/shared/components/shared/infoDisplay";
-import { useReduxStates } from "@/shared/redux/hooks/useReduxStates";
-import { Roles } from "@/shared/redux/slices/auth.slice";
-import Link from "next/link";
 
 export default function ParkPage() {
     

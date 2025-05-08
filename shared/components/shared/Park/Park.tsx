@@ -40,7 +40,6 @@ const Park: React.FC<ParkProps> = () => {
         : cells.length > 0
         ? calculateCellStyle(cells.length, cells[0].length)
         : {};
-console.log(cells)
     return (
         <div
             className="bg-[#000]/20 backdrop-blur-3xl rounded-4xl p-6 shadow-[0px_0px_1px_1px_rgba(255,255,255,0.25)] 
