@@ -14,7 +14,7 @@ $api.interceptors.response.use(
     (error) => {
         if (error.response?.status === 401) {
 			if (typeof window !== 'undefined') { 
-				window.location.href = '/admin/login'; 
+				window.location.href = '/login'; 
 			  }
         }
         return Promise.reject(error);

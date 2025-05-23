@@ -27,8 +27,8 @@ export default function useAuth( ) {
             };
             check();
         } else {
-            if (pathname !== "/admin/login") {
-                redirect("/admin/login");
+            if (pathname !== "/login") {
+                redirect("/login");
             }
             setAppLoading(false);
         }
