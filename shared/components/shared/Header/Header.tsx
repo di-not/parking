@@ -15,7 +15,7 @@ const Header: React.FC<HeaderProps> = ({}) => {
                 >
                     <LocalLink href={"admin/create"}>Создать парковку</LocalLink>
                     <Search />
-                    <LocalLink href={"admin/create_manager"}>
+                    <LocalLink href={"admin/manager_dashboard"}>
                         Работа с менеджерами
                     </LocalLink>
                 </div>
