@@ -2,7 +2,8 @@ export enum ParkElements {
     D = "D",
     R = ".",
     P = "P",
-    EMPTY = 'empty'
+    I="I",
+    O="O",
 }
 export enum Statuses{
     SUCCESS = 'fulfilled',

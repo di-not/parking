@@ -5,7 +5,8 @@ import useFetch from "@/shared/hooks/useFetch";
 import { useActions } from "@/shared/redux/hooks/useActions";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useReduxStates } from "@/shared/redux/hooks/useReduxStates";
+import exitIcon from "@/public/images/exit.svg";
+import barrierIcon from "@/public/images/barrier.svg";
 import { TopologyType } from "@/@types/topologyType";
 import { Primaryinput } from "@/shared/components/ui/Primaryinput";
 import roadIcon from "@/public/images/road.svg";
@@ -17,6 +18,7 @@ import useCells from "@/shared/hooks/useCells";
 import { ParkElements } from "@/@types/enums";
 import calculateCellStyle from "@/lib/utils/calculateCellStyle";
 import { SelectManager } from "@/shared/components/ui/InformationForm/InformationForm";
+
 export default function Redactor() {
     const params = useParams();
     const id = params?.id as string | undefined;
@@ -25,6 +27,8 @@ export default function Redactor() {
     if (!id) redirect("/not-found");
     if (!data) return <></>; // Если данных нет, возвращаем null
 
+    console.log(data,'это в редакторе1')
+    
     return (
         <div className="container">
             <div className="flex justify-center my-10 gap-8">
@@ -33,15 +37,14 @@ export default function Redactor() {
             shadow-[0px_0px_1px_1px_rgba(255,255,255,0.25)] 
             inset-shadow-[0px_0px_20px_2px_rgba(255,255,255,0.25)] "
                 >
-                    <A data={data} />
+                    <ParkInEditor data={data} />
                 </div>
             </div>
         </div>
     );
 }
 
-const A: React.FC<{ data: any }> = ({ data }) => {
-    console.log(data)
+const ParkInEditor: React.FC<{ data: any }> = ({ data }) => {
     
     const formStates = useForm<TopologyType>({
         defaultValues: {
@@ -59,7 +62,7 @@ const A: React.FC<{ data: any }> = ({ data }) => {
     const [cells, setCells] = useCells(formStates.watch());
     
     const onSubmit: SubmitHandler<TopologyType> = (data) => console.log(data);
-
+    console.log(cells,'это в редакторе')
     //Константы
     const height = formStates.getValues('height');
     const width =formStates.getValues('width'); 
@@ -132,32 +135,48 @@ const A: React.FC<{ data: any }> = ({ data }) => {
                                 }}
                             >
                                 {element2 === ParkElements.D ? (
-                                    <Image
-                                        width={70}
-                                        height={70}
-                                        alt="декор"
-                                        src={decorIcon}
-                                        className="invert-[100%] brightness-[0%]"
-                                    />
-                                ) : element2 === ParkElements.R ? (
-                                    <Image
-                                        width={70}
-                                        height={70}
-                                        alt="дорога"
-                                        src={roadIcon}
-                                        className="invert-[100%] brightness-[0%]"
-                                    />
-                                ) : element2 === ParkElements.P ? (
-                                    <Image
-                                        width={70}
-                                        height={70}
-                                        alt="дорога"
-                                        src={parkingIcon}
-                                        className="invert-[100%] brightness-[0%]"
-                                    />
-                                ) : (
-                                    <></>
-                                )}
+                                <Image
+                                    width={70}
+                                    height={70}
+                                    alt="декор"
+                                    src={decorIcon}
+                                    className="invert-[100%] brightness-[0%]"
+                                />
+                            ) : element2 === ParkElements.R ? (
+                                <Image
+                                    width={70}
+                                    height={70}
+                                    alt="дорога"
+                                    src={roadIcon}
+                                    className="invert-[100%] brightness-[0%]"
+                                />
+                            ) : element2 === ParkElements.P ? (
+                                <Image
+                                    width={70}
+                                    height={70}
+                                    alt="дорога"
+                                    src={parkingIcon}
+                                    className="invert-[100%] brightness-[0%]"
+                                />
+                            ) : element2 === ParkElements.O ? (
+                                <Image
+                                    width={70}
+                                    height={70}
+                                    alt="въезд"
+                                    src={exitIcon}
+                                    className="invert-[100%] brightness-[0%]"
+                                />
+                            ) : element2 === ParkElements.I ? (
+                                <Image
+                                    width={70}
+                                    height={70}
+                                    alt="выезд"
+                                    src={barrierIcon}
+                                    className="invert-[100%] brightness-[0%]"
+                                />
+                            ) : (
+                                <></>
+                            )}
                             </button>
                         ));
                     })}

@@ -5,6 +5,8 @@ import { useState } from "react";
 import roadIcon from "@/public/images/road.svg";
 import decorIcon from "@/public/images/decor.svg";
 import parkingIcon from "@/public/images/parking.svg";
+import exitIcon from "@/public/images/exit.svg";
+import barrierIcon from "@/public/images/barrier.svg";
 import { ParkElementButton } from "../../ui/ParkElementButton";
 import { useReduxStates } from "@/shared/redux/hooks/useReduxStates";
 import calculateCellStyle from "@/lib/utils/calculateCellStyle";
@@ -132,6 +134,22 @@ const Park: React.FC<ParkProps> = () => {
                                     height={70}
                                     alt="дорога"
                                     src={parkingIcon}
+                                    className="invert-[100%] brightness-[0%]"
+                                />
+                            ) : element2 === ParkElements.O ? (
+                                <Image
+                                    width={70}
+                                    height={70}
+                                    alt="въезд"
+                                    src={exitIcon}
+                                    className="invert-[100%] brightness-[0%]"
+                                />
+                            ) : element2 === ParkElements.I ? (
+                                <Image
+                                    width={70}
+                                    height={70}
+                                    alt="выезд"
+                                    src={barrierIcon}
                                     className="invert-[100%] brightness-[0%]"
                                 />
                             ) : (

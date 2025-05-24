@@ -12,13 +12,16 @@ const InfoDisplay: React.FC<infoDisplayProps> = ({ parkData }) => {
 
     const [managerLogin, setManagerLogin] = useState<string>("Загрузка...");
 
+    
     const { data, loading, error } = useFetch(
-        `manager/${parkData.manager.id}`,
+        `manager/${parkData.manager?.id}`,
         true
     );
+    
     useEffect(() => {
         if (data) setManagerLogin(data.manager_login);
     }, [data]);
+
     return (
         <div
             className=" mt-0

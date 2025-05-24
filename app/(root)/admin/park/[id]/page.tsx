@@ -20,7 +20,7 @@ export default function ParkPage() {
     if (!data) {
         return <></>;
     }
-
+    
     return (
         <div className="container">
             <div className="flex justify-center my-10 gap-8">
