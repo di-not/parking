@@ -14,6 +14,8 @@ import { useActions } from "@/shared/redux/hooks/useActions";
 import { useEffect } from "react";
 import { useReduxStates } from "@/shared/redux/hooks/useReduxStates";
 import { Primaryinput } from "../Primaryinput";
+import useFetch from "@/shared/hooks/useFetch";
+import { ManagerType } from "@/app/(root)/admin/manager_dashboard/page";
 
 interface InformationFormProps {}
 
@@ -33,8 +35,11 @@ const InformationForm: React.FC<InformationFormProps> = () => {
         setTopologyWithoutCells(formStates.getValues());
     }, [formStates.watch()]);
 
-    const onSubmit: SubmitHandler<InformationFormType> = (data) =>
+    const onSubmit: SubmitHandler<InformationFormType> = (data) => {
+        console.log(data);
+
         setTopologyWithoutCells(data);
+    };
 
     return (
         <div className="mt-9 h-[calc(100%_-_65px)]">
@@ -88,33 +93,25 @@ const InformationForm: React.FC<InformationFormProps> = () => {
                     placeholder="Ночной тариф"
                     type={"number"}
                 />
-                <Select>
-                    <SelectTrigger
-                        className="flex justify-between font-medium items-center shadow-[0px_3px_4px_0px_rgba(0,0,0,0.25)] p-[11px] pl-5 pr-6 w-full bg-black/30   
-                    inset-shadow-[0px_0px_12px_2px_rgba(255,255,255,0.25)]
-                    rounded-full text-white text-[16px] focus:outline-1! outline-[#fff]/30! outline-offset-0! "
-                    >
-                        <SelectValue placeholder="Менеджер" />
-                    </SelectTrigger>
-                    <SelectContent
-                        className="bg-[#000]/25 absolute backdrop-blur-3xl rounded-4xl shadow-[1px_0px_1px_0px_rgba(255,255,255,0.25)] 
-                    inset-shadow-[0px_0px_4px_0.1px_rgba(255,255,255,0.25)] max-h-[250px]"
-                    >
-                        <SelectGroup className="p-2 gap-1 ">
-                            <SelectLabel className="text-white/50 text-sm font-normal">
-                                Менеджеры
-                            </SelectLabel>
-                            <SelectItem value="manager1">Менеджер1</SelectItem>
-                            <SelectItem value="manager2">Менеджер2</SelectItem>
-                            <SelectItem value="manager3">Менеджер3</SelectItem>
-                            <SelectItem value="manager4">Менеджер4</SelectItem>
-                            <SelectItem value="manager5">Менеджер5</SelectItem>
-                            <SelectItem value="manager6">Менеджер6</SelectItem>
-                            <SelectItem value="manager7">Менеджер7</SelectItem>
-                            <SelectItem value="manager8">Менеджер8</SelectItem>
-                        </SelectGroup>
-                    </SelectContent>
-                </Select>
+                <SelectManager formStates={formStates} />
+                <button
+                    onClick={() => {
+                        formStates.reset({
+                            name: "",
+                            address: "",
+                            width: 4,
+                            height: 4,
+                            day_tariff: 0,
+                            night_tariff: 0,
+                        });
+                    }}
+                    type="button"
+                    className="flex bg-white/30 p-3 rounded-full shadow-[0px_3px_4px_0px_rgba(0,0,0,0.1)] 
+            inset-shadow-[0px_0px_20px_3px_rgba(255,255,255,0.25)] text-center text-[16px] text-white font-semibold justify-center
+            transition delay-50 duration-300 ease-in-out hover:inset-shadow-[0px_0px_25px_3px_rgba(255,255,255,0.55)] hover:shadow-[0px_0px_10px_4px_rgba(255,255,255,0.35)]"
+                >
+                    Очистить форму
+                </button>
 
                 <button
                     type="submit"
@@ -129,3 +126,48 @@ const InformationForm: React.FC<InformationFormProps> = () => {
     );
 };
 export { InformationForm };
+
+export const SelectManager = ({ formStates }: any) => {
+    const { data, loading, error } = useFetch(`/manager`, true);
+    return (
+        <Select
+            onValueChange={(v) => {
+                formStates.setValue("manager_id", v.toString());
+            }}
+            value={formStates.getValues("manager_id")}
+        >
+            <SelectTrigger
+                className="flex justify-between font-medium items-center shadow-[0px_3px_4px_0px_rgba(0,0,0,0.25)] p-[11px] pl-5 pr-6 w-full bg-black/30   
+                    inset-shadow-[0px_0px_12px_2px_rgba(255,255,255,0.25)]
+                    rounded-full text-white text-[16px] focus:outline-1! outline-[#fff]/30! outline-offset-0! "
+            >
+                <SelectValue placeholder="Менеджер" />
+            </SelectTrigger>
+            <SelectContent
+                className="bg-[#000]/25 absolute backdrop-blur-3xl rounded-4xl shadow-[1px_0px_1px_0px_rgba(255,255,255,0.25)] 
+                    inset-shadow-[0px_0px_4px_0.1px_rgba(255,255,255,0.25)] max-h-[250px]"
+            >
+                <SelectGroup className="p-2 gap-1 ">
+                    <SelectLabel
+                        key="-1"
+                        className="text-white/50 text-sm font-normal"
+                    >
+                        Менеджеры
+                    </SelectLabel>
+                    {data ? (
+                        data.map((element: ManagerType, index: number) => (
+                            <SelectItem
+                                value={`${element.manager_id}`}
+                                key={element.manager_id}
+                            >
+                                {element.manager_login}
+                            </SelectItem>
+                        ))
+                    ) : (
+                        <SelectItem value={`загрузка`}>загрузка</SelectItem>
+                    )}
+                </SelectGroup>
+            </SelectContent>
+        </Select>
+    );
+};

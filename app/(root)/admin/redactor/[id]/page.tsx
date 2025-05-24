@@ -16,6 +16,7 @@ import { ParkElementButton } from "@/shared/components/ui/ParkElementButton";
 import useCells from "@/shared/hooks/useCells";
 import { ParkElements } from "@/@types/enums";
 import calculateCellStyle from "@/lib/utils/calculateCellStyle";
+import { SelectManager } from "@/shared/components/ui/InformationForm/InformationForm";
 export default function Redactor() {
     const params = useParams();
     const id = params?.id as string | undefined;
@@ -40,6 +41,8 @@ export default function Redactor() {
 }
 
 const A: React.FC<{ data: any }> = ({ data }) => {
+    console.log(data)
+    
     const formStates = useForm<TopologyType>({
         defaultValues: {
             name: data.name,
@@ -49,6 +52,7 @@ const A: React.FC<{ data: any }> = ({ data }) => {
             day_tariff: data.day_tariff,
             night_tariff: data.night_tariff,
             cells: data.cells,
+            manager_id:data.manager.id.toString()
         },
     });
     
@@ -76,7 +80,89 @@ const A: React.FC<{ data: any }> = ({ data }) => {
         : {};
     
     return (
-        <>
+        <div className="flex gap-10 w-full">
+            
+            <div
+                className=""
+            >
+                <div
+                    className="flex gap-5 mb-5 bg-white/30 p-2.5 pl-4 rounded-full shadow-[0px_3px_8px_0px_rgba(0,0,0,0.20)] 
+        inset-shadow-[0px_0px_10px_7px_rgba(255,255,255,0.25)]
+        "
+                >
+                    <ParkElementButton
+                        setActive={setActive}
+                        active={active}
+                        parkElement={ParkElements.D}
+                        alt="декор"
+                        src={decorIcon}
+                    />
+                    <ParkElementButton
+                        setActive={setActive}
+                        active={active}
+                        parkElement={ParkElements.R}
+                        alt="дорога"
+                        src={roadIcon}
+                    />
+                    <ParkElementButton
+                        setActive={setActive}
+                        active={active}
+                        parkElement={ParkElements.P}
+                        alt="парковка"
+                        src={parkingIcon}
+                    />
+                </div>
+                <div
+                    style={cellStyle}
+                    className={`grid w-[840px] max-h-[1300px] min-h-[600px] justify-center  gap-1.5`}
+                >
+                    {cells.map((element1, index1) => {
+                        return element1.map((element2, index2) => (
+                            <button
+                                className="cursor-pointer shadow-[0px_3px_4px_0px_rgba(0,0,0,0.25)] bg-black/30 flex justify-center
+                         items-center rounded-xl inset-shadow-[0px_0px_4px_0.1px_rgba(255,255,255,0.1)] transition delay-50 duration-300 ease-in-out
+                         hover:inset-shadow-[0px_0px_40px_0.1px_rgba(255,255,255,0.1)] hover:-translate-y-0.5 "
+                                key={index2}
+                                onClick={() => {
+                                    console.log(`;jgf`)                                    
+                                    const a = cells.map((row) => [...row]);
+                                    a[index1][index2] = active;
+                                    setCells(a);
+                                    formStates.setValue("cells", a);
+                                }}
+                            >
+                                {element2 === ParkElements.D ? (
+                                    <Image
+                                        width={70}
+                                        height={70}
+                                        alt="декор"
+                                        src={decorIcon}
+                                        className="invert-[100%] brightness-[0%]"
+                                    />
+                                ) : element2 === ParkElements.R ? (
+                                    <Image
+                                        width={70}
+                                        height={70}
+                                        alt="дорога"
+                                        src={roadIcon}
+                                        className="invert-[100%] brightness-[0%]"
+                                    />
+                                ) : element2 === ParkElements.P ? (
+                                    <Image
+                                        width={70}
+                                        height={70}
+                                        alt="дорога"
+                                        src={parkingIcon}
+                                        className="invert-[100%] brightness-[0%]"
+                                    />
+                                ) : (
+                                    <></>
+                                )}
+                            </button>
+                        ));
+                    })}
+                </div>
+            </div>
             <div>
                 <form
                     onSubmit={formStates.handleSubmit(onSubmit)}
@@ -130,91 +216,9 @@ const A: React.FC<{ data: any }> = ({ data }) => {
                         placeholder="Ночной тариф"
                         type={"number"}
                     />
+                    <SelectManager formStates={formStates} />
                 </form>
             </div>
-            <div
-                className="bg-[#000]/20 backdrop-blur-3xl rounded-4xl p-6 shadow-[0px_0px_1px_1px_rgba(255,255,255,0.25)] 
-    inset-shadow-[0px_0px_20px_2px_rgba(255,255,255,0.25)] "
-            >
-                <div
-                    className="flex gap-5 mb-5 bg-white/30 p-2.5 pl-4 rounded-full shadow-[0px_3px_8px_0px_rgba(0,0,0,0.20)] 
-        inset-shadow-[0px_0px_10px_7px_rgba(255,255,255,0.25)]
-        "
-                >
-                    <ParkElementButton
-                        setActive={setActive}
-                        active={active}
-                        parkElement={ParkElements.D}
-                        alt="декор"
-                        src={decorIcon}
-                    />
-                    <ParkElementButton
-                        setActive={setActive}
-                        active={active}
-                        parkElement={ParkElements.R}
-                        alt="дорога"
-                        src={roadIcon}
-                    />
-                    <ParkElementButton
-                        setActive={setActive}
-                        active={active}
-                        parkElement={ParkElements.P}
-                        alt="парковка"
-                        src={parkingIcon}
-                    />
-                </div>
-                <div
-                    style={cellStyle}
-                    className={`grid w-[840px] max-h-[1300px] min-h-[600px] justify-center  gap-1.5`}
-                >
-                    {cells.map((element1, index1) => {
-                        // console.log(cells)
-                        return element1.map((element2, index2) => (
-                            <button
-                                className="cursor-pointer shadow-[0px_3px_4px_0px_rgba(0,0,0,0.25)] bg-black/30 flex justify-center
-                         items-center rounded-xl inset-shadow-[0px_0px_4px_0.1px_rgba(255,255,255,0.1)] transition delay-50 duration-300 ease-in-out
-                         hover:inset-shadow-[0px_0px_40px_0.1px_rgba(255,255,255,0.1)] hover:-translate-y-0.5 "
-                                key={index2}
-                                onClick={() => {
-                                    console.log(`;jgf`)                                    
-                                    const a = cells.map((row) => [...row]);
-                                    a[index1][index2] = active;
-                                    setCells(a);
-                                    formStates.setValue("cells", a);
-                                }}
-                            >
-                                {element2 === ParkElements.D ? (
-                                    <Image
-                                        width={70}
-                                        height={70}
-                                        alt="декор"
-                                        src={decorIcon}
-                                        className="invert-[100%] brightness-[0%]"
-                                    />
-                                ) : element2 === ParkElements.R ? (
-                                    <Image
-                                        width={70}
-                                        height={70}
-                                        alt="дорога"
-                                        src={roadIcon}
-                                        className="invert-[100%] brightness-[0%]"
-                                    />
-                                ) : element2 === ParkElements.P ? (
-                                    <Image
-                                        width={70}
-                                        height={70}
-                                        alt="дорога"
-                                        src={parkingIcon}
-                                        className="invert-[100%] brightness-[0%]"
-                                    />
-                                ) : (
-                                    <></>
-                                )}
-                            </button>
-                        ));
-                    })}
-                </div>
-            </div>
-        </>
+        </div>
     );
 };

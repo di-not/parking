@@ -11,7 +11,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-type ManagerType = {
+export type ManagerType = {
     manager_id: number;
     manager_login: string;
     manager_email: string;

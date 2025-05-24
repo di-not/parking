@@ -3,13 +3,13 @@ import { TopologyType } from "@/@types/topologyType";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialState: TopologyType = {
-    
     name: "",
     address: "",
     width: 4,
     height: 4,
     day_tariff: 0,
     night_tariff: 0,
+    manager_id:0,
     cells: [],
 };
 
@@ -18,13 +18,14 @@ const topologySlice = createSlice({
     initialState,
     reducers: {
         setTopology: (state, { payload }: PayloadAction<TopologyType>) => {
-            console.log(payload)
+            console.log(payload);
             state.address = payload.address;
             state.width = payload.width;
             state.height = payload.height;
             state.name = payload.name;
             state.day_tariff = payload.day_tariff;
             state.night_tariff = payload.night_tariff;
+            state.manager_id = payload.manager_id;
         },
         setTopologyWithoutCells: (
             state,
@@ -36,10 +37,14 @@ const topologySlice = createSlice({
             state.name = payload.name;
             state.day_tariff = payload.day_tariff;
             state.night_tariff = payload.night_tariff;
+            state.manager_id = payload.manager_id;
         },
 
-        setTopologyCells: (state, { payload }: PayloadAction<ParkElements[][]>) => {            
-            state.cells = payload.slice()
+        setTopologyCells: (
+            state,
+            { payload }: PayloadAction<ParkElements[][]>
+        ) => {
+            state.cells = payload.slice();
         },
     },
 });

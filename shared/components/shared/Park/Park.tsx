@@ -10,6 +10,7 @@ import { useReduxStates } from "@/shared/redux/hooks/useReduxStates";
 import calculateCellStyle from "@/lib/utils/calculateCellStyle";
 import { useActions } from "@/shared/redux/hooks/useActions";
 import useCells from "@/shared/hooks/useCells";
+import { useRouter } from "next/navigation";
 
 interface ParkProps {}
 
@@ -17,8 +18,7 @@ const Park: React.FC<ParkProps> = () => {
     //Функции стейт менджера
     const { topology } = useReduxStates();
     const { setTopologyCells } = useActions();
-    
-    
+
     //Константы
     const height = topology.height;
     const width = topology.width;
@@ -40,37 +40,57 @@ const Park: React.FC<ParkProps> = () => {
         : cells.length > 0
         ? calculateCellStyle(cells.length, cells[0].length)
         : {};
+
+    const router = useRouter();
+
+    const handleBack = () => {
+        try {
+            router.back();
+        } catch (e) {
+            router.push("/admin");
+        }
+    };
     return (
         <div
             className="bg-[#000]/20 backdrop-blur-3xl rounded-4xl p-6 shadow-[0px_0px_1px_1px_rgba(255,255,255,0.25)] 
         inset-shadow-[0px_0px_20px_2px_rgba(255,255,255,0.25)] "
         >
-            <div
-                className="flex gap-5 mb-5 bg-white/30 p-2.5 pl-4 rounded-full shadow-[0px_3px_8px_0px_rgba(0,0,0,0.20)] 
+            <div className="flex gap-6">
+                <button
+                    onClick={handleBack}
+                    className=" text-white 
+                text-[30px] font-medium bg-white/30 max-w-[70px] w-full rounded-full h-[70px] shadow-[0px_3px_8px_0px_rgba(0,0,0,0.20)] 
+            inset-shadow-[0px_0px_10px_7px_rgba(255,255,255,0.25)] "
+                >
+                    ←
+                </button>
+                <div
+                    className=" w-full flex gap-5 mb-5 bg-white/30 p-2.5 pl-4 rounded-full shadow-[0px_3px_8px_0px_rgba(0,0,0,0.20)] 
             inset-shadow-[0px_0px_10px_7px_rgba(255,255,255,0.25)]
             "
-            >
-                <ParkElementButton
-                    setActive={setActive}
-                    active={active}
-                    parkElement={ParkElements.D}
-                    alt="декор"
-                    src={decorIcon}
-                />
-                <ParkElementButton
-                    setActive={setActive}
-                    active={active}
-                    parkElement={ParkElements.R}
-                    alt="дорога"
-                    src={roadIcon}
-                />
-                <ParkElementButton
-                    setActive={setActive}
-                    active={active}
-                    parkElement={ParkElements.P}
-                    alt="парковка"
-                    src={parkingIcon}
-                />
+                >
+                    <ParkElementButton
+                        setActive={setActive}
+                        active={active}
+                        parkElement={ParkElements.D}
+                        alt="декор"
+                        src={decorIcon}
+                    />
+                    <ParkElementButton
+                        setActive={setActive}
+                        active={active}
+                        parkElement={ParkElements.R}
+                        alt="дорога"
+                        src={roadIcon}
+                    />
+                    <ParkElementButton
+                        setActive={setActive}
+                        active={active}
+                        parkElement={ParkElements.P}
+                        alt="парковка"
+                        src={parkingIcon}
+                    />
+                </div>
             </div>
             <div
                 style={cellStyle}

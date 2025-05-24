@@ -7,5 +7,6 @@ export type TopologyType = {
     height: number;
     day_tariff:number;
     night_tariff:number;
+    manager_id:number;
     cells:  ParkElements[][];
 };
