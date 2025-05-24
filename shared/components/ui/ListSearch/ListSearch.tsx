@@ -20,10 +20,12 @@ const ListSearch: React.FC<ListSearchType> = ({
     search,
 }) => {
     useEffect(() => {
+        console.log(search)
+        
         fetchFunction({
             search,
         });
-    }, []);
+    }, [search]);
 
     const successAndEmpty =
         parkings && parkings.length === 0 && status === Statuses.SUCCESS;

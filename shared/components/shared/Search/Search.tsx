@@ -12,7 +12,7 @@ const Search: React.FC<SearchProps> = () => {
     const { searchValue } = useReduxStates();
     const { setSearch } = useActions();
     const [curSearchValue, setCurSearchValue] = useState<string>(
-        searchValue.searchValue
+        searchValue
     );
 
     const inputRef = useRef<HTMLInputElement | null>(null);
@@ -29,7 +29,6 @@ const Search: React.FC<SearchProps> = () => {
             event.code === "Enter" &&
             event.target instanceof HTMLInputElement
         ) {
-            console.log(curSearchValue);
             setSearch(curSearchValue);
         }
     };

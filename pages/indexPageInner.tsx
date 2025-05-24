@@ -9,10 +9,7 @@ const IndexPage: React.FC= () => {
 
     // Функции стейт менеджера
     const { parkingStatus, parkingArray, searchValue } = useReduxStates();
-
-    // useEffect(() => {
-    //     setPage(0);
-    // }, [search]);
+    
     return (
         <div className="container">
             <div
@@ -24,16 +21,12 @@ const IndexPage: React.FC= () => {
                     Все парковки
                 </p>
             </div>
-            {searchValue ? (
                 <ListSearch
                     fetchFunction={fetchParkings}
-                    search={""}
+                    search={searchValue}
                     status={parkingStatus}
                     parkings={parkingArray}
                 />
-            ) : (
-                <></>
-            )}
         </div>
     );
 };
