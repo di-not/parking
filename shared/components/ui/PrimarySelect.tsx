@@ -22,7 +22,6 @@ export const PrimarySelect: React.FC<PrimarySelectType> = ({
     data,
     title,
 }) => {
-    console.log(data)
     
     return (
         <Select

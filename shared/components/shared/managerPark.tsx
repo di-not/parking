@@ -10,7 +10,7 @@ const ManagerPark: React.FC = () => {
     const { data, loading, error } = useFetch("/parking", true);
 
     if (!data) return <>ошибка</>;
-    const onclickSimulate = () => {};
+    
     return (
         <div className="flex gap-10">
             <div className="container">
@@ -18,7 +18,7 @@ const ManagerPark: React.FC = () => {
                     <ParkDisplay parkData={data[0]} />
                     <div className="">
                         <InfoDisplay parkData={data[0]} manager />
-                        <SimulateOptionsModal/>
+                        <SimulateOptionsModal topology={data[0]}/>
                     </div>
                 </div>
             </div>

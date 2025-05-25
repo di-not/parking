@@ -3,7 +3,10 @@ import { RootState } from "../store";
 
 export const useReduxStates = () => {
     const topology = useSelector((state: RootState) => state.topology);
-    const searchValue = useSelector((state: RootState) => state.search.searchValue);
+    const searchValue = useSelector(
+        (state: RootState) => state.search.searchValue
+    );
+    const simulation = useSelector((state: RootState) => state.simulation);
 
     const parkingStatus = useSelector(
         (state: RootState) => state.parkings.status
@@ -25,5 +28,6 @@ export const useReduxStates = () => {
         parkingStatus,
         role,
         isAuthenticated,
+        simulation,
     };
 };

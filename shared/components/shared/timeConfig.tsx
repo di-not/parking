@@ -1,11 +1,10 @@
 import { Primaryinput } from "../ui/Primaryinput";
 import { PrimarySelect } from "../ui/PrimarySelect";
-import styles from "./ArrivalConfig.module.scss";
 interface TimeConfigProps {
     formStates: any;
 }
 const TimeConfig: React.FC<TimeConfigProps> = ({ formStates }) => {
-    const traficType = formStates.watch("parking_time_config.traficType");
+    const parkingType = formStates.watch("parking_time_config.parkingType");
     const arrivaltype = formStates.watch("parking_time_config.type");
     return (
         <>
@@ -19,9 +18,9 @@ const TimeConfig: React.FC<TimeConfigProps> = ({ formStates }) => {
                     },
                     { title: "Случайное время", value: "random" },
                 ]}
-                formValue={"parking_time_config.traficType"}
+                formValue={"parking_time_config.parkingType"}
             />
-            {traficType === "random" && (
+            {parkingType === "random" && (
                 <PrimarySelect
                     formStates={formStates}
                     title="Тип распределения"
@@ -42,7 +41,7 @@ const TimeConfig: React.FC<TimeConfigProps> = ({ formStates }) => {
                     formValue={"parking_time_config.type"}
                 />
             )}
-            {traficType === "determind" && (
+            {parkingType === "determind" && (
                 <Primaryinput
                     register={formStates.register(
                         "parking_time_config.discrete_time",
@@ -54,7 +53,7 @@ const TimeConfig: React.FC<TimeConfigProps> = ({ formStates }) => {
                     type={"number"}
                 />
             )}
-            {arrivaltype === "normal" && (
+            {arrivaltype === "normal" && parkingType === 'random' && (
                 <>
                     <Primaryinput
                         register={formStates.register("parking_time_config.mean", {
@@ -75,7 +74,7 @@ const TimeConfig: React.FC<TimeConfigProps> = ({ formStates }) => {
                     />
                 </>
             )}
-            {arrivaltype === "exponential" && (
+            {arrivaltype === "exponential" && parkingType === 'random' && (
                 <>
                     <Primaryinput
                         register={formStates.register("parking_time_config.lambda", {
@@ -86,7 +85,7 @@ const TimeConfig: React.FC<TimeConfigProps> = ({ formStates }) => {
                     />
                 </>
             )}
-            {arrivaltype === "uniform" && (
+            {arrivaltype === "uniform" && parkingType === 'random' && (
                 <>
                     <Primaryinput
                         register={formStates.register(

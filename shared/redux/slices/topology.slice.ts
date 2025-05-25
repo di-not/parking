@@ -9,7 +9,7 @@ const initialState: TopologyType = {
     height: 4,
     day_tariff: 0,
     night_tariff: 0,
-    manager_id:0,
+    manager_id: 0,
     cells: [],
 };
 
@@ -18,7 +18,6 @@ const topologySlice = createSlice({
     initialState,
     reducers: {
         setTopology: (state, { payload }: PayloadAction<TopologyType>) => {
-            console.log(payload);
             state.address = payload.address;
             state.width = payload.width;
             state.height = payload.height;

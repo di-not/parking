@@ -1,6 +1,5 @@
 import { Primaryinput } from "../ui/Primaryinput";
 import { PrimarySelect } from "../ui/PrimarySelect";
-import styles from "./ArrivalConfig.module.scss";
 interface ArrivalConfigProps {
     formStates: any;
 }
@@ -54,7 +53,7 @@ const ArrivalConfig: React.FC<ArrivalConfigProps> = ({ formStates }) => {
                     type={"number"}
                 />
             )}
-            {arrivaltype === "normal" && (
+            {arrivaltype === "normal" && traficType === 'random' && (
                 <>
                     <Primaryinput
                         register={formStates.register("arrival_config.mean", {
@@ -75,7 +74,7 @@ const ArrivalConfig: React.FC<ArrivalConfigProps> = ({ formStates }) => {
                     />
                 </>
             )}
-            {arrivaltype === "exponential" && (
+            {arrivaltype === "exponential" && traficType === 'random' && (
                 <>
                     <Primaryinput
                         register={formStates.register("arrival_config.lambda", {
@@ -86,7 +85,7 @@ const ArrivalConfig: React.FC<ArrivalConfigProps> = ({ formStates }) => {
                     />
                 </>
             )}
-            {arrivaltype === "uniform" && (
+            {arrivaltype === "uniform" && traficType === 'random' && (
                 <>
                     <Primaryinput
                         register={formStates.register(

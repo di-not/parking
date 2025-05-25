@@ -11,10 +11,12 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { ArrivalConfig } from "../shared/ArrivalConfig";
 import { useState } from "react";
 import { TimeConfig } from "../shared/timeConfig";
+import { useActions } from "@/shared/redux/hooks/useActions";
+import { TopologyType } from "@/@types/topologyType";
 
-type SimulateForm = {
+export type SimulateForm = {
     arrival_config: {
-        traficType: "random" | "determind"; //
+        traficType?: "random" | "determind"; //
         type: "exponential" | "normal" | "uniform" | "discrete"; //
         lambda?: number; // необязательное, только для type="exponential", от 0.1 до 1
         mean?: number; // необязательное, только для type="normal", от 2 до 15
@@ -25,23 +27,34 @@ type SimulateForm = {
         parking_prob: number; // обязательное поле, от 0 до 1
     };
     parking_time_config: {
-        parkingType: "random" | "determind";
+        parkingType?: "random" | "determind";
         type: "exponential" | "normal" | "uniform" | "discrete";
         lambda?: number; // необязательное, только для type="exponential", от 0.1 до 1
         mean?: number; // необязательное, только для type="normal", от 2 до 15
         std_dev?: number; // необязательное, только для type="normal", от 0.1 до 15
         min_delay?: number; // необязательное, только для type="uniform", от 2 до 15
         max_delay?: number; // необязательное, только для type="uniform", от 2 до 15
-        discrete_time: number; // необязательное, только для type="discrete"
+        discrete_time?: number; // необязательное, только для type="discrete"
     };
     start_time: number; // обязательное поле, Unix timestamp
 };
 
-const SimulateOptionsModal: React.FC = () => {
+const SimulateOptionsModal: React.FC<{ topology: TopologyType }> = ({
+    topology,
+}) => {
     const simulationForm = useForm<SimulateForm>();
-
+    const { setSimulationConfig, setSimulationTopology } = useActions();
     const onSubmit: SubmitHandler<SimulateForm> = async (data) => {
-        console.log(data);
+        const configData = data;
+        if (configData.arrival_config.traficType === "determind") {
+            configData.arrival_config.type = "discrete";
+        }
+        if (configData.parking_time_config.parkingType === "determind") {
+            configData.parking_time_config.type = "discrete";
+        }
+        delete configData.arrival_config.traficType;
+        delete configData.parking_time_config.parkingType;
+        setSimulationConfig(configData);
     };
 
     const [type, setType] = useState<"arrival" | "time">("arrival");
@@ -49,6 +62,9 @@ const SimulateOptionsModal: React.FC = () => {
     return (
         <Dialog>
             <DialogTrigger
+                onClick={() => {
+                    setSimulationTopology(topology);
+                }}
                 className="block bg-white/30 p-3 px-4 rounded-full 
 shadow-[0px_3px_4px_0px_rgba(0,0,0,0.1)] min-w-[290px] 
 inset-shadow-[0px_0px_20px_3px_rgba(255,255,255,0.25)] text-white font-bold text-xl text-center items-center w-full mt-6"
@@ -72,15 +88,15 @@ inset-shadow-[0px_0px_20px_3px_rgba(255,255,255,0.25)] text-white font-bold text
                             className={
                                 type === "arrival"
                                     ? `mt-0
-        rounded-4xl bg-[#000]/20 backdrop-blur-3xl py-3
-shadow-[0px_0px_1px_1px_rgba(255,255,255,0.25)] px-4
+        rounded-4xl bg-[#000]/20 backdrop-blur-3xl py-3 font-bold
+shadow-[0px_0px_1px_1px_rgba(255,255,255,0.25)] px-4 text-white
 inset-shadow-[0px_0px_20px_2px_rgba(255,255,255,0.25)] min-w-[290px]`
                                     : `text-white font-bold bg-white/30 p-3 px-4 rounded-full 
 shadow-[0px_3px_4px_0px_rgba(0,0,0,0.1)] min-w-[290px]
 inset-shadow-[0px_0px_20px_3px_rgba(255,255,255,0.25)] `
                             }
                         >
-                            Тип потока
+                            Тип времени
                         </button>
                         <button
                             onClick={() => {
@@ -90,14 +106,14 @@ inset-shadow-[0px_0px_20px_3px_rgba(255,255,255,0.25)] `
                                 type === "time"
                                     ? `mt-0
         rounded-4xl bg-[#000]/20 backdrop-blur-3xl py-3 text-white
-shadow-[0px_0px_1px_1px_rgba(255,255,255,0.25)] px-4
+shadow-[0px_0px_1px_1px_rgba(255,255,255,0.25)] px-4 font-bold
 inset-shadow-[0px_0px_20px_2px_rgba(255,255,255,0.25)] min-w-[290px]`
                                     : `text-white font-bold bg-white/30 p-3 px-4 rounded-full 
 shadow-[0px_3px_4px_0px_rgba(0,0,0,0.1)] min-w-[290px]
 inset-shadow-[0px_0px_20px_3px_rgba(255,255,255,0.25)] `
                             }
                         >
-                            Тип времени
+                            Тип потока
                         </button>
                     </div>
                     <form

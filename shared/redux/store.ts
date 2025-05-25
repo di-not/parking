@@ -3,6 +3,7 @@ import topologySlice from "./slices/topology.slice";
 import searchParamsSlice from "./slices/searchParams.slice";
 import parkingsSlice from "./slices/parkings.slice";
 import authSlice from "./slices/auth.slice";
+import simulationSlice from "./slices/simulation.slice";
 import {
     persistStore,
     persistReducer,
@@ -19,7 +20,8 @@ const rootReducer = combineReducers({
     search: searchParamsSlice,
     topology: topologySlice,
     parkings:parkingsSlice,
-    auth:authSlice
+    auth:authSlice,
+    simulation:simulationSlice
 });
 
 const persistConfig = {
