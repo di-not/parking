@@ -23,7 +23,6 @@ export const fetchParkings = createAsyncThunk(
         let res: AxiosResponse<ParkingArrayType> | null =
             await $api.get<ParkingArrayType>("/parking");
 
-        console.log(search);
         if (!search)
             return {
                 data: res.data,

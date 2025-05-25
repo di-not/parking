@@ -92,6 +92,20 @@ const Park: React.FC<ParkProps> = () => {
                         alt="парковка"
                         src={parkingIcon}
                     />
+                    <ParkElementButton
+                        setActive={setActive}
+                        active={active}
+                        parkElement={ParkElements.O}
+                        alt="выезд"
+                        src={exitIcon}
+                    />
+                    <ParkElementButton
+                        setActive={setActive}
+                        active={active}
+                        parkElement={ParkElements.I}
+                        alt="въезд"
+                        src={barrierIcon}
+                    />
                 </div>
             </div>
             <div

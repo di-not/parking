@@ -25,10 +25,11 @@ const ParkElementButton: React.FC<ParkElementButtonType> = ({
                 height={50}
                 alt={alt}
                 src={src}
-                className="invert-[85%] brightness-[1000%] saturate-[0%]"
+                className="invert-[85%]"
                 style={active === parkElement ? { filter: "invert(100%)" } : {}}
             />
         </button>
     );
 };
 export { ParkElementButton };
+

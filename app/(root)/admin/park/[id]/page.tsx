@@ -7,8 +7,6 @@ import ParkDisplay from "@/shared/components/shared/parkDisplay";
 import InfoDisplay from "@/shared/components/shared/infoDisplay";
 
 export default function ParkPage() {
-    
-
     const params = useParams();
 
     const id = params?.id as string | undefined;
@@ -20,13 +18,12 @@ export default function ParkPage() {
     if (!data) {
         return <></>;
     }
-    
+
     return (
         <div className="container">
             <div className="flex justify-center my-10 gap-8">
                 <ParkDisplay parkData={data} />
-                <InfoDisplay parkData={data} />
-                
+                <InfoDisplay parkData={data} manager={false} />
             </div>
         </div>
     );

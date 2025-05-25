@@ -19,9 +19,7 @@ const ListSearch: React.FC<ListSearchType> = ({
     parkings,
     search,
 }) => {
-    useEffect(() => {
-        console.log(search)
-        
+    useEffect(() => {        
         fetchFunction({
             search,
         });

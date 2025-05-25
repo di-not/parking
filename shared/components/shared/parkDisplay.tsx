@@ -18,6 +18,7 @@ const ParkDisplay: React.FC<Props> = ({parkData}) => {
     //Константы
     const height = parkData.height;
     const width = parkData.width;
+    
     const condition =
         width &&
         height &&
@@ -31,7 +32,6 @@ const ParkDisplay: React.FC<Props> = ({parkData}) => {
         : parkData.cells.length > 0
         ? calculateCellStyle(parkData.cells.length, parkData.cells[0].length)
         : {};
-    console.log(parkData)
     
     return (
         <div

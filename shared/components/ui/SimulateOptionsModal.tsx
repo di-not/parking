@@ -1,0 +1,127 @@
+"use client";
+
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/shared/components/ui/dialog";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { ArrivalConfig } from "../shared/ArrivalConfig";
+import { useState } from "react";
+import { TimeConfig } from "../shared/timeConfig";
+
+type SimulateForm = {
+    arrival_config: {
+        traficType: "random" | "determind"; //
+        type: "exponential" | "normal" | "uniform" | "discrete"; //
+        lambda?: number; // необязательное, только для type="exponential", от 0.1 до 1
+        mean?: number; // необязательное, только для type="normal", от 2 до 15
+        std_dev?: number; // необязательное, только для type="normal", от 0.1 до 15
+        min_delay?: number; // необязательное, только для type="uniform", от 2 до 15
+        max_delay?: number; // необязательное, только для type="uniform", от 2 до 15
+        discrete_time?: number; // необязательное, только для type="discrete" //
+        parking_prob: number; // обязательное поле, от 0 до 1
+    };
+    parking_time_config: {
+        parkingType: "random" | "determind";
+        type: "exponential" | "normal" | "uniform" | "discrete";
+        lambda?: number; // необязательное, только для type="exponential", от 0.1 до 1
+        mean?: number; // необязательное, только для type="normal", от 2 до 15
+        std_dev?: number; // необязательное, только для type="normal", от 0.1 до 15
+        min_delay?: number; // необязательное, только для type="uniform", от 2 до 15
+        max_delay?: number; // необязательное, только для type="uniform", от 2 до 15
+        discrete_time: number; // необязательное, только для type="discrete"
+    };
+    start_time: number; // обязательное поле, Unix timestamp
+};
+
+const SimulateOptionsModal: React.FC = () => {
+    const simulationForm = useForm<SimulateForm>();
+
+    const onSubmit: SubmitHandler<SimulateForm> = async (data) => {
+        console.log(data);
+    };
+
+    const [type, setType] = useState<"arrival" | "time">("arrival");
+
+    return (
+        <Dialog>
+            <DialogTrigger
+                className="block bg-white/30 p-3 px-4 rounded-full 
+shadow-[0px_3px_4px_0px_rgba(0,0,0,0.1)] min-w-[290px] 
+inset-shadow-[0px_0px_20px_3px_rgba(255,255,255,0.25)] text-white font-bold text-xl text-center items-center w-full mt-6"
+            >
+                Симулировать
+            </DialogTrigger>
+            <DialogContent
+                className="min-w-[800px] min-h-2/3  bg-[#000]/0  rounded-4xl backdrop-blur-3xl
+                    shadow-[0px_0px_1px_1px_rgba(255,255,255,0.25)] transition delay-50 duration-300 ease-in-out
+                inset-shadow-[0px_0px_20px_2px_rgba(255,255,255,0.25)] border-0"
+            >
+                <DialogHeader>
+                    <DialogTitle className="text-center text-[30px] text-white font-bold mb-10">
+                        Окно моделирования
+                    </DialogTitle>
+                    <div className="w-full mb-2 flex justify-evenly">
+                        <button
+                            onClick={() => {
+                                setType("time");
+                            }}
+                            className={
+                                type === "arrival"
+                                    ? `mt-0
+        rounded-4xl bg-[#000]/20 backdrop-blur-3xl py-3
+shadow-[0px_0px_1px_1px_rgba(255,255,255,0.25)] px-4
+inset-shadow-[0px_0px_20px_2px_rgba(255,255,255,0.25)] min-w-[290px]`
+                                    : `text-white font-bold bg-white/30 p-3 px-4 rounded-full 
+shadow-[0px_3px_4px_0px_rgba(0,0,0,0.1)] min-w-[290px]
+inset-shadow-[0px_0px_20px_3px_rgba(255,255,255,0.25)] `
+                            }
+                        >
+                            Тип потока
+                        </button>
+                        <button
+                            onClick={() => {
+                                setType("arrival");
+                            }}
+                            className={
+                                type === "time"
+                                    ? `mt-0
+        rounded-4xl bg-[#000]/20 backdrop-blur-3xl py-3 text-white
+shadow-[0px_0px_1px_1px_rgba(255,255,255,0.25)] px-4
+inset-shadow-[0px_0px_20px_2px_rgba(255,255,255,0.25)] min-w-[290px]`
+                                    : `text-white font-bold bg-white/30 p-3 px-4 rounded-full 
+shadow-[0px_3px_4px_0px_rgba(0,0,0,0.1)] min-w-[290px]
+inset-shadow-[0px_0px_20px_3px_rgba(255,255,255,0.25)] `
+                            }
+                        >
+                            Тип времени
+                        </button>
+                    </div>
+                    <form
+                        onSubmit={simulationForm.handleSubmit(onSubmit)}
+                        className="h-full flex flex-col gap-3"
+                    >
+                        {type === "arrival" ? (
+                            <ArrivalConfig formStates={simulationForm} />
+                        ) : (
+                            <TimeConfig formStates={simulationForm} />
+                        )}
+                        <button
+                            type="submit"
+                            className="text-white font-bold 
+                            bg-white/30 p-3 px-4 rounded-full 
+shadow-[0px_3px_4px_0px_rgba(0,0,0,0.1)] min-w-[290px]
+inset-shadow-[0px_0px_20px_3px_rgba(255,255,255,0.25)] mt-auto"
+                        >
+                            Применить
+                        </button>
+                    </form>
+                </DialogHeader>
+            </DialogContent>
+        </Dialog>
+    );
+};
+export { SimulateOptionsModal };

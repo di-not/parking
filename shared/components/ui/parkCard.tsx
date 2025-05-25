@@ -16,9 +16,9 @@ const parkCard: React.FC<parkCardProps> = ({ element }) => {
                 hover:inset-shadow-[0px_0px_20px_5px_rgba(255,255,255,0.4)] h-[370px] "
         >
             <Link href={`/admin/park/${element.id}`} className="flex flex-col h-full p-6 ">
-                <ul className="flex justify-center gap-2 mb-6 items-center m-auto">
+                <ul className="flex flex-col justify-center gap-2 mb-6 items-center m-auto">
                     {element.cells.map((string, index) => (
-                        <li className="flex flex-col gap-2" key={index}>
+                        <li className="flex  gap-2" key={index}>
                             {string.map((_, index_) => (
                                 <div
                                     key={index_}
