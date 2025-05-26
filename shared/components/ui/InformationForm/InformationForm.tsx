@@ -16,6 +16,7 @@ import { useReduxStates } from "@/shared/redux/hooks/useReduxStates";
 import { Primaryinput } from "../Primaryinput";
 import useFetch from "@/shared/hooks/useFetch";
 import { ManagerType } from "@/app/(root)/admin/manager_dashboard/page";
+import $api from "@/http";
 
 interface InformationFormProps {}
 
@@ -36,9 +37,10 @@ const InformationForm: React.FC<InformationFormProps> = () => {
     }, [formStates.watch()]);
 
     const onSubmit: SubmitHandler<InformationFormType> = (data) => {
-        console.log(data);
+        const res = $api.patch(`/parking/`,data)
 
         setTopologyWithoutCells(data);
+
     };
 
     return (

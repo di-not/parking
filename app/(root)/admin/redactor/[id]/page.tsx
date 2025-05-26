@@ -18,6 +18,7 @@ import useCells from "@/shared/hooks/useCells";
 import { ParkElements } from "@/@types/enums";
 import calculateCellStyle from "@/lib/utils/calculateCellStyle";
 import { SelectManager } from "@/shared/components/ui/InformationForm/InformationForm";
+import $api from "@/http";
 
 export default function Redactor() {
     const params = useParams();
@@ -27,8 +28,8 @@ export default function Redactor() {
     if (!id) redirect("/not-found");
     if (!data) return <></>; // Если данных нет, возвращаем null
 
-    console.log(data,'это в редакторе1')
-    
+    console.log(data, "это в редакторе1");
+
     return (
         <div className="container">
             <div className="flex justify-center my-10 gap-8">
@@ -37,15 +38,14 @@ export default function Redactor() {
             shadow-[0px_0px_1px_1px_rgba(255,255,255,0.25)] 
             inset-shadow-[0px_0px_20px_2px_rgba(255,255,255,0.25)] "
                 >
-                    <ParkInEditor data={data} />
+                    <ParkInEditor data={data} id={id} />
                 </div>
             </div>
         </div>
     );
 }
 
-const ParkInEditor: React.FC<{ data: any }> = ({ data }) => {
-    
+const ParkInEditor: React.FC<{ data: any ,id:string}> = ({ data ,id}) => {
     const formStates = useForm<TopologyType>({
         defaultValues: {
             name: data.name,
@@ -55,17 +55,21 @@ const ParkInEditor: React.FC<{ data: any }> = ({ data }) => {
             day_tariff: data.day_tariff,
             night_tariff: data.night_tariff,
             cells: data.cells,
-            manager_id:data.manager.id.toString()
+            manager_id: data.manager.id.toString(),
         },
     });
-    
+
     const [cells, setCells] = useCells(formStates.watch());
+
+    const onSubmit: SubmitHandler<TopologyType> = (data) => {      
+        
+        const res = $api.patch(`/parking/${id}`,data)
+    }
     
-    const onSubmit: SubmitHandler<TopologyType> = (data) => console.log(data);
-    console.log(cells,'это в редакторе')
+    
     //Константы
-    const height = formStates.getValues('height');
-    const width =formStates.getValues('width'); 
+    const height = formStates.getValues("height");
+    const width = formStates.getValues("width");
     const condition =
         width &&
         height &&
@@ -77,17 +81,14 @@ const ParkInEditor: React.FC<{ data: any }> = ({ data }) => {
     const [active, setActive] = useState<ParkElements>(ParkElements.D);
 
     const cellStyle = condition
-        ? calculateCellStyle(height,width )
+        ? calculateCellStyle(height, width)
         : cells.length > 0
         ? calculateCellStyle(cells.length, cells[0].length)
         : {};
-    
+
     return (
         <div className="flex gap-10 w-full">
-            
-            <div
-                className=""
-            >
+            <div className="">
                 <div
                     className="flex gap-5 mb-5 bg-white/30 p-2.5 pl-4 rounded-full shadow-[0px_3px_8px_0px_rgba(0,0,0,0.20)] 
         inset-shadow-[0px_0px_10px_7px_rgba(255,255,255,0.25)]
@@ -127,7 +128,7 @@ const ParkInEditor: React.FC<{ data: any }> = ({ data }) => {
                          hover:inset-shadow-[0px_0px_40px_0.1px_rgba(255,255,255,0.1)] hover:-translate-y-0.5 "
                                 key={index2}
                                 onClick={() => {
-                                    console.log(`;jgf`)                                    
+                                    console.log(`;jgf`);
                                     const a = cells.map((row) => [...row]);
                                     a[index1][index2] = active;
                                     setCells(a);
@@ -135,48 +136,48 @@ const ParkInEditor: React.FC<{ data: any }> = ({ data }) => {
                                 }}
                             >
                                 {element2 === ParkElements.D ? (
-                                <Image
-                                    width={70}
-                                    height={70}
-                                    alt="декор"
-                                    src={decorIcon}
-                                    className="invert-[100%] brightness-[0%]"
-                                />
-                            ) : element2 === ParkElements.R ? (
-                                <Image
-                                    width={70}
-                                    height={70}
-                                    alt="дорога"
-                                    src={roadIcon}
-                                    className="invert-[100%] brightness-[0%]"
-                                />
-                            ) : element2 === ParkElements.P ? (
-                                <Image
-                                    width={70}
-                                    height={70}
-                                    alt="дорога"
-                                    src={parkingIcon}
-                                    className="invert-[100%] brightness-[0%]"
-                                />
-                            ) : element2 === ParkElements.O ? (
-                                <Image
-                                    width={70}
-                                    height={70}
-                                    alt="въезд"
-                                    src={exitIcon}
-                                    className="invert-[100%] brightness-[0%]"
-                                />
-                            ) : element2 === ParkElements.I ? (
-                                <Image
-                                    width={70}
-                                    height={70}
-                                    alt="выезд"
-                                    src={barrierIcon}
-                                    className="invert-[100%] brightness-[0%]"
-                                />
-                            ) : (
-                                <></>
-                            )}
+                                    <Image
+                                        width={70}
+                                        height={70}
+                                        alt="декор"
+                                        src={decorIcon}
+                                        className="invert-[100%] brightness-[0%]"
+                                    />
+                                ) : element2 === ParkElements.R ? (
+                                    <Image
+                                        width={70}
+                                        height={70}
+                                        alt="дорога"
+                                        src={roadIcon}
+                                        className="invert-[100%] brightness-[0%]"
+                                    />
+                                ) : element2 === ParkElements.P ? (
+                                    <Image
+                                        width={70}
+                                        height={70}
+                                        alt="дорога"
+                                        src={parkingIcon}
+                                        className="invert-[100%] brightness-[0%]"
+                                    />
+                                ) : element2 === ParkElements.O ? (
+                                    <Image
+                                        width={70}
+                                        height={70}
+                                        alt="въезд"
+                                        src={exitIcon}
+                                        className="invert-[100%] brightness-[0%]"
+                                    />
+                                ) : element2 === ParkElements.I ? (
+                                    <Image
+                                        width={70}
+                                        height={70}
+                                        alt="выезд"
+                                        src={barrierIcon}
+                                        className="invert-[100%] brightness-[0%]"
+                                    />
+                                ) : (
+                                    <></>
+                                )}
                             </button>
                         ));
                     })}
@@ -185,7 +186,7 @@ const ParkInEditor: React.FC<{ data: any }> = ({ data }) => {
             <div>
                 <form
                     onSubmit={formStates.handleSubmit(onSubmit)}
-                    className="flex flex-col gap-4  "
+                    className="flex flex-col gap-4  h-full"
                 >
                     <Primaryinput
                         register={formStates.register("name", {
@@ -236,6 +237,15 @@ const ParkInEditor: React.FC<{ data: any }> = ({ data }) => {
                         type={"number"}
                     />
                     <SelectManager formStates={formStates} />
+                    <button
+                        type="submit"
+                        className={`bg-white/30  rounded-full shadow-[0px_3px_4px_0px_rgba(0,0,0,0.1)] 
+            inset-shadow-[0px_0px_20px_3px_rgba(255,255,255,0.25)] text-center text-[16px] text-white font-semibold justify-center
+            transition delay-50 duration-300 ease-in-out hover:inset-shadow-[0px_0px_25px_3px_rgba(255,255,255,0.55)] 
+            hover:shadow-[0px_0px_10px_4px_rgba(255,255,255,0.35)] w-full mt-auto p-[12px_64px] h-fit`}
+                    >
+                        Изменить
+                    </button>
                 </form>
             </div>
         </div>
