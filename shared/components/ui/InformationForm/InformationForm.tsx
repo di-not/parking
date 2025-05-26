@@ -37,10 +37,10 @@ const InformationForm: React.FC<InformationFormProps> = () => {
     }, [formStates.watch()]);
 
     const onSubmit: SubmitHandler<InformationFormType> = (data) => {
-        const res = $api.patch(`/parking/`,data)
+        data.manager.id = Number(data.manager.id);
+        const res = $api.post(`/parking`, { ...data, ...topology });
 
         setTopologyWithoutCells(data);
-
     };
 
     return (
@@ -64,6 +64,7 @@ const InformationForm: React.FC<InformationFormProps> = () => {
                         required: true,
                         max: 6,
                         min: 4,
+                        valueAsNumber: true,
                     })}
                     placeholder="Длина"
                     type={"number"}
@@ -73,6 +74,7 @@ const InformationForm: React.FC<InformationFormProps> = () => {
                         required: true,
                         max: 6,
                         min: 4,
+                        valueAsNumber: true,
                     })}
                     placeholder="Ширина"
                     type={"number"}
@@ -82,6 +84,7 @@ const InformationForm: React.FC<InformationFormProps> = () => {
                         required: true,
                         max: 1000,
                         min: 0,
+                        valueAsNumber: true,
                     })}
                     placeholder="Дневной тариф"
                     type={"number"}
@@ -90,6 +93,7 @@ const InformationForm: React.FC<InformationFormProps> = () => {
                     register={formStates.register("night_tariff", {
                         required: true,
                         max: 1000,
+                        valueAsNumber: true,
                         min: 0,
                     })}
                     placeholder="Ночной тариф"
@@ -134,9 +138,9 @@ export const SelectManager = ({ formStates }: any) => {
     return (
         <Select
             onValueChange={(v) => {
-                formStates.setValue("manager_id", v.toString());
+                formStates.setValue("manager.id", v);
             }}
-            value={formStates.getValues("manager_id")}
+            value={formStates.getValues("manager.id")}
         >
             <SelectTrigger
                 className="flex justify-between font-medium items-center shadow-[0px_3px_4px_0px_rgba(0,0,0,0.25)] p-[11px] pl-5 pr-6 w-full bg-black/30   

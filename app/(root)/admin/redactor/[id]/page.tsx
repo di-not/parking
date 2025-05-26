@@ -28,7 +28,6 @@ export default function Redactor() {
     if (!id) redirect("/not-found");
     if (!data) return <></>; // Если данных нет, возвращаем null
 
-    console.log(data, "это в редакторе1");
 
     return (
         <div className="container">
@@ -45,7 +44,7 @@ export default function Redactor() {
     );
 }
 
-const ParkInEditor: React.FC<{ data: any ,id:string}> = ({ data ,id}) => {
+const ParkInEditor: React.FC<{ data: any; id: string }> = ({ data, id }) => {
     const formStates = useForm<TopologyType>({
         defaultValues: {
             name: data.name,
@@ -55,18 +54,17 @@ const ParkInEditor: React.FC<{ data: any ,id:string}> = ({ data ,id}) => {
             day_tariff: data.day_tariff,
             night_tariff: data.night_tariff,
             cells: data.cells,
-            manager_id: data.manager.id.toString(),
+            manager: { id: data.manager.id.toString() },
         },
     });
 
     const [cells, setCells] = useCells(formStates.watch());
 
-    const onSubmit: SubmitHandler<TopologyType> = (data) => {      
-        
-        const res = $api.patch(`/parking/${id}`,data)
-    }
-    
-    
+    const onSubmit: SubmitHandler<TopologyType> = (data) => {
+        data.manager.id = Number(data.manager.id);
+        const res = $api.patch(`/parking/${id}`, data);
+    };
+
     //Константы
     const height = formStates.getValues("height");
     const width = formStates.getValues("width");

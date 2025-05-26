@@ -47,18 +47,25 @@ const TimeConfig: React.FC<TimeConfigProps> = ({ formStates }) => {
                         "parking_time_config.discrete_time",
                         {
                             required: true,
+                            valueAsNumber: true,
                         }
                     )}
                     placeholder="Время появления"
                     type={"number"}
                 />
             )}
-            {arrivaltype === "normal" && parkingType === 'random' && (
+            {arrivaltype === "normal" && parkingType === "random" && (
                 <>
                     <Primaryinput
-                        register={formStates.register("parking_time_config.mean", {
-                            required: true,
-                        })}
+                        register={formStates.register(
+                            "parking_time_config.mean",
+                            {
+                                required: true,
+                                valueAsNumber: true,
+                                min: 2,
+                                max: 15,
+                            }
+                        )}
                         placeholder="Медиана"
                         type={"number"}
                     />
@@ -67,31 +74,45 @@ const TimeConfig: React.FC<TimeConfigProps> = ({ formStates }) => {
                             "parking_time_config.std_dev",
                             {
                                 required: true,
+                                valueAsNumber: true,
+                                min: 0.1,
+                                max: 15,
                             }
                         )}
+                        step={0.01}
                         placeholder="Дисперсия"
                         type={"number"}
                     />
                 </>
             )}
-            {arrivaltype === "exponential" && parkingType === 'random' && (
+            {arrivaltype === "exponential" && parkingType === "random" && (
                 <>
                     <Primaryinput
-                        register={formStates.register("parking_time_config.lambda", {
-                            required: true,
-                        })}
+                        register={formStates.register(
+                            "parking_time_config.lambda",
+                            {
+                                required: true,
+                                valueAsNumber: true,
+                                min: 0.1,
+                                max: 1,
+                            }
+                        )}
                         placeholder="Интенсивность"
+                        step={0.01}
                         type={"number"}
                     />
                 </>
             )}
-            {arrivaltype === "uniform" && parkingType === 'random' && (
+            {arrivaltype === "uniform" && parkingType === "random" && (
                 <>
                     <Primaryinput
                         register={formStates.register(
                             "parking_time_config.min_delay",
                             {
                                 required: true,
+                                valueAsNumber: true,
+                                min: 2,
+                                max: 15,
                             }
                         )}
                         placeholder="минимальное значение"
@@ -102,6 +123,9 @@ const TimeConfig: React.FC<TimeConfigProps> = ({ formStates }) => {
                             "parking_time_config.max_delay",
                             {
                                 required: true,
+                                valueAsNumber: true,
+                                min: 2,
+                                max: 15,
                             }
                         )}
                         placeholder="максимальное значение"
@@ -109,20 +133,6 @@ const TimeConfig: React.FC<TimeConfigProps> = ({ formStates }) => {
                     />
                 </>
             )}
-            <Primaryinput
-                register={formStates.register("start_time", {
-                    required: true,
-                })}
-                placeholder="Время начала"
-                type={"number"}
-            />
-            <Primaryinput
-                register={formStates.register("parking_time_config.parking_prob", {
-                    required: true,
-                })}
-                placeholder="Вероятность заезда"
-                type={"number"}
-            />
         </>
     );
 };

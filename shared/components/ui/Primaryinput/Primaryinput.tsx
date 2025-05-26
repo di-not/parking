@@ -2,15 +2,18 @@ export type PrimaryinputType = {
     register: any;
     type?: "number" | "text";
     placeholder?: string;
+    step?: number;
 };
 const Primaryinput: React.FC<PrimaryinputType> = ({
     register,
     placeholder,
     type,
+    step,
 }) => {
     return (
         <div>
             <input
+                step={`${step}`}
                 {...register}
                 type={type ? type : "text"}
                 className="text-white shadow-[0px_3px_4px_0px_rgba(0,0,0,0.25)] 

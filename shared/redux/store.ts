@@ -28,7 +28,7 @@ const persistConfig = {
     key: "root",
     storage,
     version: 1,
-	whitelist: ['topology','auth']
+	whitelist: ['topology','auth','simulation']
 };
 
 const persistedReducer = persistReducer(

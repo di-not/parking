@@ -47,17 +47,21 @@ const ArrivalConfig: React.FC<ArrivalConfigProps> = ({ formStates }) => {
                         "arrival_config.discrete_time",
                         {
                             required: true,
+                            valueAsNumber: true,
                         }
                     )}
                     placeholder="Время появления"
                     type={"number"}
                 />
             )}
-            {arrivaltype === "normal" && traficType === 'random' && (
+            {arrivaltype === "normal" && traficType === "random" && (
                 <>
                     <Primaryinput
                         register={formStates.register("arrival_config.mean", {
                             required: true,
+                            valueAsNumber: true,
+                            min: 2,
+                            max: 15,
                         })}
                         placeholder="Медиана"
                         type={"number"}
@@ -67,31 +71,42 @@ const ArrivalConfig: React.FC<ArrivalConfigProps> = ({ formStates }) => {
                             "arrival_config.std_dev",
                             {
                                 required: true,
+                                valueAsNumber: true,
+                                min: 0.1,
+                                max: 15,
                             }
                         )}
                         placeholder="Дисперсия"
                         type={"number"}
+                        step={0.01}
                     />
                 </>
             )}
-            {arrivaltype === "exponential" && traficType === 'random' && (
+            {arrivaltype === "exponential" && traficType === "random" && (
                 <>
                     <Primaryinput
                         register={formStates.register("arrival_config.lambda", {
                             required: true,
+                            valueAsNumber: true,
+                            min: 0.1,
+                            max: 1,
                         })}
+                        step={0.01}
                         placeholder="Интенсивность"
                         type={"number"}
                     />
                 </>
             )}
-            {arrivaltype === "uniform" && traficType === 'random' && (
+            {arrivaltype === "uniform" && traficType === "random" && (
                 <>
                     <Primaryinput
                         register={formStates.register(
                             "arrival_config.min_delay",
                             {
                                 required: true,
+                                valueAsNumber: true,
+                                min: 2,
+                                max: 15,
                             }
                         )}
                         placeholder="минимальное значение"
@@ -102,6 +117,9 @@ const ArrivalConfig: React.FC<ArrivalConfigProps> = ({ formStates }) => {
                             "arrival_config.max_delay",
                             {
                                 required: true,
+                                valueAsNumber: true,
+                                min: 2,
+                                max: 15,
                             }
                         )}
                         placeholder="максимальное значение"
@@ -109,17 +127,15 @@ const ArrivalConfig: React.FC<ArrivalConfigProps> = ({ formStates }) => {
                     />
                 </>
             )}
-            <Primaryinput
-                register={formStates.register("start_time", {
-                    required: true,
-                })}
-                placeholder="Время начала"
-                type={"number"}
-            />
+
             <Primaryinput
                 register={formStates.register("arrival_config.parking_prob", {
                     required: true,
+                    valueAsNumber: true,
+                    min: 0.1,
+                    max: 1,
                 })}
+                step={0.01}
                 placeholder="Вероятность заезда"
                 type={"number"}
             />

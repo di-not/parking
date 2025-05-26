@@ -13,6 +13,7 @@ import { useState } from "react";
 import { TimeConfig } from "../shared/timeConfig";
 import { useActions } from "@/shared/redux/hooks/useActions";
 import { TopologyType } from "@/@types/topologyType";
+import { useRouter } from "next/navigation";
 
 export type SimulateForm = {
     arrival_config: {
@@ -42,6 +43,7 @@ export type SimulateForm = {
 const SimulateOptionsModal: React.FC<{ topology: TopologyType }> = ({
     topology,
 }) => {
+    const router = useRouter();
     const simulationForm = useForm<SimulateForm>();
     const { setSimulationConfig, setSimulationTopology } = useActions();
     const onSubmit: SubmitHandler<SimulateForm> = async (data) => {
@@ -52,9 +54,12 @@ const SimulateOptionsModal: React.FC<{ topology: TopologyType }> = ({
         if (configData.parking_time_config.parkingType === "determind") {
             configData.parking_time_config.type = "discrete";
         }
+        
         delete configData.arrival_config.traficType;
         delete configData.parking_time_config.parkingType;
+        configData.start_time = Math.floor(Date.now() / 1000)
         setSimulationConfig(configData);
+        router.push("/manager/simulation");
     };
 
     const [type, setType] = useState<"arrival" | "time">("arrival");

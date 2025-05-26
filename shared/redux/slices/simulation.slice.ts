@@ -1,6 +1,7 @@
 import { TopologyType } from "@/@types/topologyType";
 import { SimulateForm } from "@/shared/components/ui/SimulateOptionsModal";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+
 type SimulationType = SimulateForm & { parking: TopologyType };
 
 const initialState: SimulationType = {
@@ -11,7 +12,7 @@ const initialState: SimulationType = {
         height: 4,
         day_tariff: 0,
         night_tariff: 0,
-        manager_id: 0,
+        manager:{id: 0},
         cells: [],
     },
     arrival_config: {
@@ -21,7 +22,7 @@ const initialState: SimulationType = {
     parking_time_config: {
         type: "normal",
     },
-    start_time: 0,
+    start_time: 1716542400,
 };
 
 const simulationSlice = createSlice({
@@ -38,6 +39,8 @@ const simulationSlice = createSlice({
             state.parking = payload;
             state.parking.height = payload.cells.length;
             state.parking.width = payload.cells[0].length;
+            state.parking.day_tariff = 9
+            state.parking.night_tariff= 8
         },
         setSimulationConfig: (
             state,

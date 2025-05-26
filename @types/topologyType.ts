@@ -5,8 +5,8 @@ export type TopologyType = {
     address: string;
     width: number;
     height: number;
-    day_tariff:number;
-    night_tariff:number;
-    manager_id:number;
-    cells:  ParkElements[][];
+    day_tariff: number;
+    night_tariff: number;
+    manager: { id: number };
+    cells: ParkElements[][];
 };
