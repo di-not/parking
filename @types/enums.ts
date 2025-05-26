@@ -4,6 +4,8 @@ export enum ParkElements {
     P = "P",
     I="I",
     O="O",
+    C="C"
+    
 }
 export enum Statuses{
     SUCCESS = 'fulfilled',

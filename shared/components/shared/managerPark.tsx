@@ -27,48 +27,4 @@ const ManagerPark: React.FC = () => {
 };
 export { ManagerPark };
 
-// button onClick={sendMessage}>Send Message</button>
-//             <button
-//                 onClick={() => {
-//                     if (
-//                         socketRef.current &&
-//                         socketRef.current.readyState === WebSocket.OPEN
-//                     )
-//                         socketRef.current.send("start");
-//                 }}
-//             >
-//                 start
-//             </button>
-//             <button
-//                 onClick={() => {
-//                     if (
-//                         socketRef.current &&
-//                         socketRef.current.readyState === WebSocket.OPEN
-//                     )
-//                         socketRef.current.send("stop");
-//                 }}
-//             >
-//                 stop
-//             </button>
-//             <button
-//                 onClick={() => {
-//                     if (
-//                         socketRef.current &&
-//                         socketRef.current.readyState === WebSocket.OPEN
-//                     )
-//                         socketRef.current.send("pause");
-//                 }}
-//             >
-//                 pause
-//             </button>
-//             <button
-//                 onClick={() => {
-//                     if (
-//                         socketRef.current &&
-//                         socketRef.current.readyState === WebSocket.OPEN
-//                     )
-//                         socketRef.current.send("resume");
-//                 }}
-//             >
-//                 resume
-//             </button>
+
