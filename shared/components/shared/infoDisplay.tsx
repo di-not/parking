@@ -10,7 +10,6 @@ interface infoDisplayProps {
 }
 const InfoDisplay: React.FC<infoDisplayProps> = ({ parkData, manager }) => {
     const { role } = useReduxStates();
-
     const [managerLogin, setManagerLogin] = useState<string>("Загрузка...");
 
     const { data, loading, error } = useFetch(
@@ -27,7 +26,7 @@ const InfoDisplay: React.FC<infoDisplayProps> = ({ parkData, manager }) => {
             className=" mt-0
         rounded-4xl bg-[#000]/20 backdrop-blur-3xl py-5
 shadow-[0px_0px_1px_1px_rgba(255,255,255,0.25)] 
-inset-shadow-[0px_0px_20px_2px_rgba(255,255,255,0.25)] w-full px-4 h-fit"
+inset-shadow-[0px_0px_20px_2px_rgba(255,255,255,0.25)] w-full px-4 h-fit mb-5"
         >
             <div
                 className="flex bg-white/30 p-3 px-4 rounded-full 

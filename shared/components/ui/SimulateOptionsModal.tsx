@@ -87,7 +87,7 @@ const SimulateOptionsModal: React.FC<{
                 }}
                 className="block bg-white/30 p-3 px-4 rounded-full 
 shadow-[0px_3px_4px_0px_rgba(0,0,0,0.1)] min-w-[290px] 
-inset-shadow-[0px_0px_20px_3px_rgba(255,255,255,0.25)] text-white font-bold text-xl text-center items-center w-full mt-6"
+inset-shadow-[0px_0px_20px_3px_rgba(255,255,255,0.25)] text-white font-bold text-xl text-center items-center w-full "
             >
                 {topology ? "Симулировать" : "Редактировать"}
             </DialogTrigger>
