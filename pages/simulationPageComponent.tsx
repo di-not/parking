@@ -21,7 +21,7 @@ const SimulationPageComponent: React.FC<simulationPageProps> = ({
     const [park, setPark] = useState<ParkElements[][]>(
         simulation.parking.cells
     );
-    const [carStatus, setCarSatus] = useState<CarStatus | "">("");
+    const [carStatus, setCarStatus] = useState<CarStatus | "">("");
     const [counterPark, setCounterPark] = useState(0);
     const [earned, setEarned] = useState(0);
 
@@ -36,38 +36,47 @@ const SimulationPageComponent: React.FC<simulationPageProps> = ({
                     childRef.current?.createNewObject();
                     setTimeout(() => {
                         socketRef.current.send(`park ${message.car_id}`);
-                    }, 3000);
+                    }, 3500);
+                    console.log(`arrive`);
                 }
                 if (message.event === "park") {
-                    setCounterPark(counterPark + 1);
                     let newPark = _.cloneDeep(park);
                     newPark[message.park_x][message.park_y] = ParkElements.C;
-                    setPark(newPark);
-                    setCarSatus(CarStatus.PARK);
+                    setCounterPark((prev) => prev + 1);
+                    setPark((prev) => {
+                        const current = _.cloneDeep(prev);
+                        current[message.park_x][message.park_y] =[message.park_x][message.park_y] = ParkElements.C;
+                        return current;
+                    });
+                    setCarStatus(CarStatus.PARK);
                     setTimeout(() => {
-                        setCarSatus("");
+                        setCarStatus("");
                     }, 500);
+                    console.log(`park`);
                 }
                 if (message.event === "leave") {
-                    let newPark = _.cloneDeep(park);
-
-                    newPark[message.park_x][message.park_y] =
-                        simulation.parking.cells[message.park_x][
-                            message.park_y
-                        ];
-                    setPark(newPark);
-                    setCounterPark(counterPark - 1);
+                    setPark((prev) => {
+                        const current = _.cloneDeep(prev);
+                        current[message.park_x][message.park_y] =
+                            simulation.parking.cells[message.park_x][
+                                message.park_y
+                            ];
+                        return current;
+                    });
+                    setCounterPark((prev) => prev - 1);
                     setEarned(message.price + earned);
+                    console.log(`leave`);
                 }
                 if (message.event === "drove-away") {
-                    setCarSatus(CarStatus.DROVEAWAY);
+                    setCarStatus(CarStatus.DROVEAWAY);
                     setTimeout(() => {
-                        setCarSatus("");
+                        setCarStatus("");
                     }, 500);
+                    console.log(`drove-away`);
                 }
             }
         };
-    }, [park]);
+    }, [park, counterPark, earned, carStatus]);
 
     const countOfParks = useMemo(() => {
         return simulation.parking.cells
