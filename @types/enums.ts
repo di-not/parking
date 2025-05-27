@@ -12,3 +12,7 @@ export enum Statuses{
     ERROR = 'rejected',
     LOADING = 'loading'
 } 
+export enum CarStatus{
+    DROVEAWAY='drove-away',
+    PARK='park'
+}

@@ -50,7 +50,7 @@ export default function SimulationPage() {
     return (
         <div className="w-full justify-center items-center flex">
             <div className="container">
-                <SimulationPageComponent  socketRef={socketRef} />
+                <SimulationPageComponent socketRef={socketRef} />
             </div>
         </div>
     );

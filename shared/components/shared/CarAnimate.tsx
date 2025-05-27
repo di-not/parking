@@ -85,7 +85,6 @@ const CarAnimate = forwardRef<ChildMethods>((props, ref) => {
                     </div>
                 ))}
             </div>
-            
         </>
     );
 });

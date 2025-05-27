@@ -1,16 +1,10 @@
-import roadIcon from "@/public/images/road.svg";
-import decorIcon from "@/public/images/decor.svg";
-import parkingIcon from "@/public/images/parking.svg";
-import exitIcon from "@/public/images/exit.svg";
-import barrierIcon from "@/public/images/barrier.svg";
-import carIcon from "@/public/images/car.svg";
-import Image from "next/image";
-import { ParkElements } from "@/@types/enums";
+import { CarStatus, ParkElements } from "@/@types/enums";
 import { useReduxStates } from "@/shared/redux/hooks/useReduxStates";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import _ from "lodash";
-
 import { CarAnimate } from "@/shared/components/shared/CarAnimate";
+import { ParkElenmentComponent } from "@/shared/components/ui/parkElenmentComponent";
+import { SimulationControlPanel } from "@/shared/components/shared/simulationControlPanel";
 interface simulationPageProps {
     socketRef: any;
 }
@@ -18,24 +12,21 @@ interface simulationPageProps {
 export type ChildMethods = {
     createNewObject: () => void;
 };
+
 const SimulationPageComponent: React.FC<simulationPageProps> = ({
     socketRef,
 }) => {
     const { simulation } = useReduxStates();
+
     const [park, setPark] = useState<ParkElements[][]>(
         simulation.parking.cells
     );
-
-    const sendMessage = () => {
-        if (
-            socketRef.current &&
-            socketRef.current.readyState === WebSocket.OPEN
-        ) {
-            socketRef.current.send("start");
-        }
-    };
+    const [carStatus, setCarSatus] = useState<CarStatus | "">("");
+    const [counterPark, setCounterPark] = useState(0);
+    const [earned, setEarned] = useState(0);
 
     const childRef = useRef<ChildMethods>(null);
+
     useEffect(() => {
         socketRef.current.onmessage = (event: any) => {
             if (event.data !== "ok") {
@@ -43,42 +34,66 @@ const SimulationPageComponent: React.FC<simulationPageProps> = ({
 
                 if (message.event === "arrive") {
                     childRef.current?.createNewObject();
-                    socketRef.current.send(`park ${message.car_id}`);
+                    setTimeout(() => {
+                        socketRef.current.send(`park ${message.car_id}`);
+                    }, 3000);
                 }
                 if (message.event === "park") {
+                    setCounterPark(counterPark + 1);
                     let newPark = _.cloneDeep(park);
                     newPark[message.park_x][message.park_y] = ParkElements.C;
                     setPark(newPark);
+                    setCarSatus(CarStatus.PARK);
+                    setTimeout(() => {
+                        setCarSatus("");
+                    }, 500);
                 }
                 if (message.event === "leave") {
                     let newPark = _.cloneDeep(park);
+
                     newPark[message.park_x][message.park_y] =
                         simulation.parking.cells[message.park_x][
                             message.park_y
                         ];
                     setPark(newPark);
+                    setCounterPark(counterPark - 1);
+                    setEarned(message.price + earned);
+                }
+                if (message.event === "drove-away") {
+                    setCarSatus(CarStatus.DROVEAWAY);
+                    setTimeout(() => {
+                        setCarSatus("");
+                    }, 500);
                 }
             }
         };
     }, [park]);
-    const buttonClass = `bg-white/30  rounded-full shadow-[0px_3px_4px_0px_rgba(0,0,0,0.1)] 
-            inset-shadow-[0px_0px_20px_3px_rgba(255,255,255,0.25)] text-center text-[16px] text-white font-semibold justify-center
-            transition delay-50 duration-300 ease-in-out hover:inset-shadow-[0px_0px_25px_3px_rgba(255,255,255,0.55)] 
-            hover:shadow-[0px_0px_10px_4px_rgba(255,255,255,0.35)] w-fit p-[12px_64px] h-full`;
+
+    const countOfParks = useMemo(() => {
+        return simulation.parking.cells
+            .flat()
+            .filter((el) => el === ParkElements.P).length;
+    }, []); // Пустой массив зависимостей
+
+    const sendWSMessage = (message: string) => {
+        if (socketRef.current?.readyState === WebSocket.OPEN)
+            socketRef.current.send(message);
+    };
+
     return (
         <div className="m-auto">
-            <div className="">
+            <div className="mb-5 flex gap-5">
                 <div
-                    className={buttonClass}
-                    onClick={() => {
-                        if (
-                            socketRef.current &&
-                            socketRef.current.readyState === WebSocket.OPEN
-                        )
-                            socketRef.current.send("resume");
-                    }}
+                    className={`bg-white/30  rounded-full shadow-[0px_3px_4px_0px_rgba(0,0,0,0.1)] 
+            inset-shadow-[0px_0px_20px_3px_rgba(255,255,255,0.25)] text-center text-[16px] text-white font-semibold justify-center p-[12px_64px] h-full`}
                 >
-                    {/* <p>{`Места: ${}`}</p> */}
+                    <p>{`Места: ${counterPark} / ${countOfParks}`}</p>
+                </div>
+                <div
+                    className={`bg-white/30  rounded-full shadow-[0px_3px_4px_0px_rgba(0,0,0,0.1)] 
+            inset-shadow-[0px_0px_20px_3px_rgba(255,255,255,0.25)] text-center text-[16px] text-white font-semibold justify-center p-[12px_64px] h-full`}
+                >
+                    <p>{`Зарaботано: ${earned.toFixed(2)}`}</p>
                 </div>
             </div>
             <ul
@@ -88,145 +103,31 @@ const SimulationPageComponent: React.FC<simulationPageProps> = ({
                 {park.map((cols, indexCols) => (
                     <li className="flex gap-2 " key={indexCols}>
                         {cols.map((element, indexRows) => (
-                            <div
+                            <ParkElenmentComponent
                                 key={indexRows}
-                                className="w-[120px] h-[120px] shadow-[0px_3px_4px_0px_rgba(0,0,0,0.25)] bg-black/30 flex justify-center
-                             items-center rounded-xl inset-shadow-[0px_0px_4px_0.1px_rgba(255,255,255,0.1)] transition delay-50 duration-300 ease-in-out"
-                            >
-                                {element === ParkElements.D ? (
-                                    <Image
-                                        width={70}
-                                        height={70}
-                                        alt="декор"
-                                        src={decorIcon}
-                                        className="invert-[100%] brightness-[0%]"
-                                    />
-                                ) : element === ParkElements.R ? (
-                                    <Image
-                                        width={70}
-                                        height={70}
-                                        alt="дорога"
-                                        src={roadIcon}
-                                        className="invert-[100%] brightness-[0%]"
-                                    />
-                                ) : element === ParkElements.P ? (
-                                    <Image
-                                        width={70}
-                                        height={70}
-                                        alt="дорога"
-                                        src={parkingIcon}
-                                        className="invert-[100%] brightness-[0%]"
-                                    />
-                                ) : element === ParkElements.O ? (
-                                    <Image
-                                        width={70}
-                                        height={70}
-                                        alt="въезд"
-                                        src={exitIcon}
-                                        className="invert-[100%] brightness-[0%]"
-                                    />
-                                ) : element === ParkElements.I ? (
-                                    <Image
-                                        width={70}
-                                        height={70}
-                                        alt="выезд"
-                                        src={barrierIcon}
-                                        className="invert-[100%] brightness-[0%]"
-                                    />
-                                ) : element === ParkElements.C ? (
-                                    <Image
-                                        width={70}
-                                        height={70}
-                                        alt="машина"
-                                        src={carIcon}
-                                    />
-                                ) : (
-                                    <></>
-                                )}
-                            </div>
+                                element={element}
+                            />
                         ))}
                     </li>
                 ))}
             </ul>
-            <div className="w-full gap-6 flex mt-5">
-                <button onClick={sendMessage} className={buttonClass}>
-                    Начать симуляцию
-                </button>
-                <button
-                    className={buttonClass}
-                    onClick={() => {
-                        if (
-                            socketRef.current &&
-                            socketRef.current.readyState === WebSocket.OPEN
-                        )
-                            socketRef.current.send("stop");
-                    }}
-                >
-                    Остановить
-                </button>
-                <button
-                    className={buttonClass}
-                    onClick={() => {
-                        if (
-                            socketRef.current &&
-                            socketRef.current.readyState === WebSocket.OPEN
-                        )
-                            socketRef.current.send("resume");
-                    }}
-                >
-                    Возобновить
-                </button>
-            </div>
-            <div className=" flex flex-col mt-5 gap-1">
+            <SimulationControlPanel
+                sendMessage={sendWSMessage}
+                socket={socketRef.current}
+            />
+            <div className="flex flex-col mt-5 gap-1 relative">
                 <CarAnimate ref={childRef} />
+                <div className="text absolute text-xl text-white bottom-[-30px]">
+                    {carStatus === CarStatus.DROVEAWAY ? (
+                        <>мимо</>
+                    ) : carStatus === CarStatus.PARK ? (
+                        <>запарковался</>
+                    ) : (
+                        <></>
+                    )}
+                </div>
             </div>
         </div>
     );
 };
 export { SimulationPageComponent };
-
-// button onClick={sendMessage}>Send Message</button>
-//             <button
-//                 onClick={() => {
-//                     if (
-//                         socketRef.current &&
-//                         socketRef.current.readyState === WebSocket.OPEN
-//                     )
-//                         socketRef.current.send("start");
-//                 }}
-//             >
-//                 start
-//             </button>
-// <button
-//     onClick={() => {
-//         if (
-//             socketRef.current &&
-//             socketRef.current.readyState === WebSocket.OPEN
-//         )
-//             socketRef.current.send("stop");
-//     }}
-// >
-//     stop
-// </button>
-//             <button
-//                 onClick={() => {
-//                     if (
-//                         socketRef.current &&
-//                         socketRef.current.readyState === WebSocket.OPEN
-//                     )
-//                         socketRef.current.send("pause");
-//                 }}
-//             >
-//                 pause
-//             </button>
-//             <button
-//                 onClick={() => {
-//                     if (
-//                         socketRef.current &&
-//                         socketRef.current.readyState === WebSocket.OPEN
-//                     )
-//                         socketRef.current.send("resume");
-//                 }}
-//             >
-//                 resume
-//             </button>

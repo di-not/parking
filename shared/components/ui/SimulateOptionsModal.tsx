@@ -13,7 +13,8 @@ import { useState } from "react";
 import { TimeConfig } from "../shared/timeConfig";
 import { useActions } from "@/shared/redux/hooks/useActions";
 import { TopologyType } from "@/@types/topologyType";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useReduxStates } from "@/shared/redux/hooks/useReduxStates";
 
 export type SimulateForm = {
     arrival_config: {
@@ -40,12 +41,19 @@ export type SimulateForm = {
     start_time: number; // обязательное поле, Unix timestamp
 };
 
-const SimulateOptionsModal: React.FC<{ topology: TopologyType }> = ({
-    topology,
-}) => {
+const SimulateOptionsModal: React.FC<{
+    onClick?: () => void;
+    topology?: TopologyType;
+}> = ({ topology, onClick }) => {
     const router = useRouter();
-    const simulationForm = useForm<SimulateForm>();
+    const pathname = usePathname(); // Текущий путь
+    const targetPath = "/manager/simulation";
+    const { simulation } = useReduxStates();
+    const simulationForm = useForm<SimulateForm>({
+        defaultValues: simulation,
+    });
     const { setSimulationConfig, setSimulationTopology } = useActions();
+
     const onSubmit: SubmitHandler<SimulateForm> = async (data) => {
         const configData = data;
         if (configData.arrival_config.traficType === "determind") {
@@ -54,12 +62,18 @@ const SimulateOptionsModal: React.FC<{ topology: TopologyType }> = ({
         if (configData.parking_time_config.parkingType === "determind") {
             configData.parking_time_config.type = "discrete";
         }
-        
+
         delete configData.arrival_config.traficType;
         delete configData.parking_time_config.parkingType;
-        configData.start_time = Math.floor(Date.now() / 1000)
+        configData.start_time = Math.floor(Date.now() / 1000);
         setSimulationConfig(configData);
-        router.push("/manager/simulation");
+        if (pathname === targetPath) {
+            // Если URL совпадает, принудительно перезагружаем страницу
+            window.location.reload();
+        } else {
+            // Если не совпадает, делаем редирект
+            router.replace(targetPath);
+        }
     };
 
     const [type, setType] = useState<"arrival" | "time">("arrival");
@@ -68,13 +82,14 @@ const SimulateOptionsModal: React.FC<{ topology: TopologyType }> = ({
         <Dialog>
             <DialogTrigger
                 onClick={() => {
-                    setSimulationTopology(topology);
+                    topology && setSimulationTopology(topology);
+                    onClick && onClick();
                 }}
                 className="block bg-white/30 p-3 px-4 rounded-full 
 shadow-[0px_3px_4px_0px_rgba(0,0,0,0.1)] min-w-[290px] 
 inset-shadow-[0px_0px_20px_3px_rgba(255,255,255,0.25)] text-white font-bold text-xl text-center items-center w-full mt-6"
             >
-                Симулировать
+                {topology ? "Симулировать" : "Редактировать"}
             </DialogTrigger>
             <DialogContent
                 className="min-w-[800px] min-h-2/3  bg-[#000]/0  rounded-4xl backdrop-blur-3xl
