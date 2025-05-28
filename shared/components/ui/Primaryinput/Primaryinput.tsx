@@ -1,6 +1,6 @@
 export type PrimaryinputType = {
     register: any;
-    type?: "number" | "text";
+    type?: "number" | "text"| "time"| "date";
     placeholder?: string;
     step?: number;
 };

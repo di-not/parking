@@ -59,7 +59,7 @@ const SimulationPageComponent: React.FC<simulationPageProps> = ({
 
       // +1 час каждую минуту (опционально, если нужно ускорение)
       const hourTimer = setInterval(() => {
-        setDisplayTime(prev => prev + 3600);
+        setDisplayTime(prev => prev + 1800);
       }, 60000);
 
       return () => {

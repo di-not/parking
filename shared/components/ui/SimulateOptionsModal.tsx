@@ -15,6 +15,7 @@ import { useActions } from "@/shared/redux/hooks/useActions";
 import { TopologyType } from "@/@types/topologyType";
 import { usePathname, useRouter } from "next/navigation";
 import { useReduxStates } from "@/shared/redux/hooks/useReduxStates";
+import { Primaryinput } from "./Primaryinput";
 
 export type SimulateForm = {
     arrival_config: {
@@ -39,6 +40,10 @@ export type SimulateForm = {
         discrete_time?: number; // необязательное, только для type="discrete"
     };
     start_time: number; // обязательное поле, Unix timestamp
+    time: {
+        date: any;
+        time: any;
+    };
 };
 
 const SimulateOptionsModal: React.FC<{
@@ -65,13 +70,15 @@ const SimulateOptionsModal: React.FC<{
         if (configData.parking_time_config.parkingType === "determind") {
             configData.parking_time_config.type = "discrete";
         }
+        console.log(data);
 
         delete configData.arrival_config.traficType;
         delete configData.parking_time_config.parkingType;
-        configData.start_time = Math.floor(Date.now() / 1000);
 
+        const dateTimeString = `${data.time.date}T${data.time.time}`;
+        const timestamp = Math.floor(new Date(dateTimeString).getTime() / 1000);
         setSimulationConfig(configData);
-
+        configData.start_time = timestamp;
         if (pathname === targetPath) {
             // Если URL совпадает, принудительно перезагружаем страницу
             window.location.reload();
@@ -150,6 +157,20 @@ inset-shadow-[0px_0px_20px_3px_rgba(255,255,255,0.25)] `
                         ) : (
                             <TimeConfig formStates={simulationForm} />
                         )}
+                        <Primaryinput
+                            register={simulationForm.register("time.date", {
+                                required: true,
+                            })}
+                            placeholder="Дисперсия"
+                            type="date"
+                        />
+                        <Primaryinput
+                            register={simulationForm.register("time.time", {
+                                required: true,
+                            })}
+                            placeholder="Дисперсия"
+                            type="time"
+                        />
                         <button
                             type="submit"
                             className="text-white font-bold 
