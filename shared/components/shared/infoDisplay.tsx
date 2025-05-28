@@ -51,7 +51,7 @@ inset-shadow-[0px_0px_20px_3px_rgba(255,255,255,0.25)] "
                     </p>
                 </div>
                 <div className="mt-4 border-b-3 pb-3 border-white/10">
-                    <p className="text-white text-lg">Ночной тариф</p>
+                    <p className="text-white text-lg">Дневной тариф</p>
                     <p className="text-white text-2xl font-bold">
                         {parkData.day_tariff} ед.
                     </p>

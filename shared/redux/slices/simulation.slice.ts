@@ -14,6 +14,7 @@ const initialState: SimulationType = {
         night_tariff: 0,
         manager: { id: 0 },
         cells: [],
+        
     },
     arrival_config: {
         type: "normal",
@@ -50,8 +51,8 @@ const simulationSlice = createSlice({
             state.parking = payload;
             state.parking.height = payload.cells.length;
             state.parking.width = payload.cells[0].length;
-            state.parking.day_tariff = 9;
-            state.parking.night_tariff = 8;
+            state.parking.day_tariff = payload.day_tariff;
+            state.parking.night_tariff = payload.night_tariff;
         },
         setSimulationConfig: (
             state,

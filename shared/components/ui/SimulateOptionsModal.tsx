@@ -40,7 +40,7 @@ export type SimulateForm = {
         discrete_time?: number; // необязательное, только для type="discrete"
     };
     start_time: number; // обязательное поле, Unix timestamp
-    time: {
+    time?: {
         date: any;
         time: any;
     };
@@ -75,7 +75,7 @@ const SimulateOptionsModal: React.FC<{
         delete configData.arrival_config.traficType;
         delete configData.parking_time_config.parkingType;
 
-        const dateTimeString = `${data.time.date}T${data.time.time}`;
+        const dateTimeString = `${data.time?.date}T${data.time?.time}`;
         const timestamp = Math.floor(new Date(dateTimeString).getTime() / 1000);
         
         configData.start_time = timestamp;
