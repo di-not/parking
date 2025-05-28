@@ -77,8 +77,9 @@ const SimulateOptionsModal: React.FC<{
 
         const dateTimeString = `${data.time.date}T${data.time.time}`;
         const timestamp = Math.floor(new Date(dateTimeString).getTime() / 1000);
-        setSimulationConfig(configData);
+        
         configData.start_time = timestamp;
+        setSimulationConfig(configData);
         if (pathname === targetPath) {
             // Если URL совпадает, принудительно перезагружаем страницу
             window.location.reload();
