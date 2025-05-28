@@ -45,14 +45,17 @@ const SimulateOptionsModal: React.FC<{
     onClick?: () => void;
     topology?: TopologyType;
 }> = ({ topology, onClick }) => {
-    const router = useRouter();
-    const pathname = usePathname(); // Текущий путь
     const targetPath = "/manager/simulation";
+
+    const router = useRouter();
+    const pathname = usePathname();
+
+    const { setSimulationConfig, setSimulationTopology } = useActions();
     const { simulation } = useReduxStates();
+
     const simulationForm = useForm<SimulateForm>({
         defaultValues: simulation,
     });
-    const { setSimulationConfig, setSimulationTopology } = useActions();
 
     const onSubmit: SubmitHandler<SimulateForm> = async (data) => {
         const configData = data;
@@ -66,7 +69,9 @@ const SimulateOptionsModal: React.FC<{
         delete configData.arrival_config.traficType;
         delete configData.parking_time_config.parkingType;
         configData.start_time = Math.floor(Date.now() / 1000);
+
         setSimulationConfig(configData);
+
         if (pathname === targetPath) {
             // Если URL совпадает, принудительно перезагружаем страницу
             window.location.reload();

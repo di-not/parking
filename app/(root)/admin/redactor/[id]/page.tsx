@@ -1,17 +1,17 @@
 "use client";
 
-import { redirect, useParams } from "next/navigation";
+import { redirect, useParams, useRouter } from "next/navigation";
 import useFetch from "@/shared/hooks/useFetch";
-import { useActions } from "@/shared/redux/hooks/useActions";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import exitIcon from "@/public/images/exit.svg";
-import barrierIcon from "@/public/images/barrier.svg";
+
 import { TopologyType } from "@/@types/topologyType";
 import { Primaryinput } from "@/shared/components/ui/Primaryinput";
 import roadIcon from "@/public/images/road.svg";
 import decorIcon from "@/public/images/decor.svg";
 import parkingIcon from "@/public/images/parking.svg";
+import exitIcon from "@/public/images/exitBlack.svg";
+import barrierIcon from "@/public/images/barrierBlack.svg";
 import Image from "next/image";
 import { ParkElementButton } from "@/shared/components/ui/ParkElementButton";
 import useCells from "@/shared/hooks/useCells";
@@ -27,7 +27,6 @@ export default function Redactor() {
 
     if (!id) redirect("/not-found");
     if (!data) return <></>; // Если данных нет, возвращаем null
-
 
     return (
         <div className="container">
@@ -62,7 +61,9 @@ const ParkInEditor: React.FC<{ data: any; id: string }> = ({ data, id }) => {
 
     const onSubmit: SubmitHandler<TopologyType> = (data) => {
         data.manager.id = Number(data.manager.id);
-        const res = $api.patch(`/parking/${id}`, data);
+        data.cells = cells
+        
+        const res = $api.patch(`parking/${id}`, data);
     };
 
     //Константы
@@ -84,35 +85,73 @@ const ParkInEditor: React.FC<{ data: any; id: string }> = ({ data, id }) => {
         ? calculateCellStyle(cells.length, cells[0].length)
         : {};
 
+    const router = useRouter();
+    const handleBack = () => {
+        try {
+            router.back();
+        } catch (e) {
+            router.push("/admin");
+        }
+    };
+
+    const onDelete = () => {
+        const res = $api.delete(`parking/${id}`);
+        router.push("/admin");
+    };
+
     return (
         <div className="flex gap-10 w-full">
             <div className="">
-                <div
-                    className="flex gap-5 mb-5 bg-white/30 p-2.5 pl-4 rounded-full shadow-[0px_3px_8px_0px_rgba(0,0,0,0.20)] 
-        inset-shadow-[0px_0px_10px_7px_rgba(255,255,255,0.25)]
+                <div className="flex gap-2">
+                    <button
+                        onClick={handleBack}
+                        className=" text-white 
+                text-[30px] font-medium bg-white/30 max-w-[70px] w-full rounded-full h-[70px] shadow-[0px_3px_8px_0px_rgba(0,0,0,0.20)] 
+            inset-shadow-[0px_0px_10px_7px_rgba(255,255,255,0.25)] "
+                    >
+                        ← 
+                    </button>
+                    <div
+                        className="flex gap-5 mb-5 bg-white/30 p-2.5 pl-4 rounded-full shadow-[0px_3px_8px_0px_rgba(0,0,0,0.20)] 
+        inset-shadow-[0px_0px_10px_7px_rgba(255,255,255,0.25)] w-full
         "
-                >
-                    <ParkElementButton
-                        setActive={setActive}
-                        active={active}
-                        parkElement={ParkElements.D}
-                        alt="декор"
-                        src={decorIcon}
-                    />
-                    <ParkElementButton
-                        setActive={setActive}
-                        active={active}
-                        parkElement={ParkElements.R}
-                        alt="дорога"
-                        src={roadIcon}
-                    />
-                    <ParkElementButton
-                        setActive={setActive}
-                        active={active}
-                        parkElement={ParkElements.P}
-                        alt="парковка"
-                        src={parkingIcon}
-                    />
+                    >
+                        <ParkElementButton
+                            setActive={setActive}
+                            active={active}
+                            parkElement={ParkElements.D}
+                            alt="декор"
+                            src={decorIcon}
+                        />
+                        <ParkElementButton
+                            setActive={setActive}
+                            active={active}
+                            parkElement={ParkElements.R}
+                            alt="дорога"
+                            src={roadIcon}
+                        />
+                        <ParkElementButton
+                            setActive={setActive}
+                            active={active}
+                            parkElement={ParkElements.P}
+                            alt="парковка"
+                            src={parkingIcon}
+                        />
+                        <ParkElementButton
+                            setActive={setActive}
+                            active={active}
+                            parkElement={ParkElements.O}
+                            alt="выезд"
+                            src={exitIcon}
+                        />
+                        <ParkElementButton
+                            setActive={setActive}
+                            active={active}
+                            parkElement={ParkElements.I}
+                            alt="въезд"
+                            src={barrierIcon}
+                        />
+                    </div>
                 </div>
                 <div
                     style={cellStyle}
@@ -202,6 +241,7 @@ const ParkInEditor: React.FC<{ data: any; id: string }> = ({ data, id }) => {
                         register={formStates.register("width", {
                             required: true,
                             max: 6,
+                            valueAsNumber: true,
                             min: 4,
                         })}
                         placeholder="Длина"
@@ -212,6 +252,7 @@ const ParkInEditor: React.FC<{ data: any; id: string }> = ({ data, id }) => {
                             required: true,
                             max: 6,
                             min: 4,
+                            valueAsNumber: true,
                         })}
                         placeholder="Ширина"
                         type={"number"}
@@ -221,6 +262,7 @@ const ParkInEditor: React.FC<{ data: any; id: string }> = ({ data, id }) => {
                             required: true,
                             max: 1000,
                             min: 0,
+                            valueAsNumber: true,
                         })}
                         placeholder="Дневной тариф"
                         type={"number"}
@@ -230,17 +272,46 @@ const ParkInEditor: React.FC<{ data: any; id: string }> = ({ data, id }) => {
                             required: true,
                             max: 1000,
                             min: 0,
+                            valueAsNumber: true,
                         })}
                         placeholder="Ночной тариф"
                         type={"number"}
                     />
                     <SelectManager formStates={formStates} />
                     <button
+                        onClick={onDelete}
+                        type="button"
+                        className={`bg-white/30 mt-auto rounded-full shadow-[0px_3px_4px_0px_rgba(0,0,0,0.1)] 
+            inset-shadow-[0px_0px_20px_3px_rgba(255,255,255,0.25)] text-center text-[16px] text-white font-semibold justify-center
+            transition delay-50 duration-300 ease-in-out hover:inset-shadow-[0px_0px_25px_3px_rgba(255,255,255,0.55)] 
+            hover:shadow-[0px_0px_10px_4px_rgba(255,255,255,0.35)] w-full  p-[12px_64px] h-fit`}
+                    >
+                        Удалить
+                    </button>
+                    <button
+                        onClick={() => {
+                            formStates.reset({
+                                name: "",
+                                address: "",
+                                width: 4,
+                                height: 4,
+                                day_tariff: 0,
+                                night_tariff: 0,
+                            });
+                        }}
+                        type="button"
+                        className="flex bg-white/30 p-3 rounded-full shadow-[0px_3px_4px_0px_rgba(0,0,0,0.1)] 
+            inset-shadow-[0px_0px_20px_3px_rgba(255,255,255,0.25)] text-center text-[16px] text-white font-semibold justify-center
+            transition delay-50 duration-300 ease-in-out hover:inset-shadow-[0px_0px_25px_3px_rgba(255,255,255,0.55)] hover:shadow-[0px_0px_10px_4px_rgba(255,255,255,0.35)]"
+                    >
+                        Очистить форму
+                    </button>
+                    <button
                         type="submit"
                         className={`bg-white/30  rounded-full shadow-[0px_3px_4px_0px_rgba(0,0,0,0.1)] 
             inset-shadow-[0px_0px_20px_3px_rgba(255,255,255,0.25)] text-center text-[16px] text-white font-semibold justify-center
             transition delay-50 duration-300 ease-in-out hover:inset-shadow-[0px_0px_25px_3px_rgba(255,255,255,0.55)] 
-            hover:shadow-[0px_0px_10px_4px_rgba(255,255,255,0.35)] w-full mt-auto p-[12px_64px] h-fit`}
+            hover:shadow-[0px_0px_10px_4px_rgba(255,255,255,0.35)] w-full  p-[12px_64px] h-fit`}
                     >
                         Изменить
                     </button>

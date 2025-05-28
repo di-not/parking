@@ -26,7 +26,7 @@ export default function Login() {
         <div className="flex gap-10 justify-center items-center m-auto">
             <div
                 className="bg-[#000]/20 backdrop-blur-3xl rounded-4xl p-4 shadow-[0px_0px_1px_1px_rgba(255,255,255,0.25)] 
-        inset-shadow-[0px_0px_20px_2px_rgba(255,255,255,0.25)] w-[450px] h-[400px]  "
+        inset-shadow-[0px_0px_20px_2px_rgba(255,255,255,0.25)] w-[450px] h-[450px]  "
             >
                 <h1 className="text-white font-bold text-3xl mt-10 text-center">
                     Авторизация
@@ -54,6 +54,16 @@ export default function Login() {
                     >
                         Войти
                     </button>
+                    <div className="flex justify-between mx-auto">
+                        <a
+                            className=" block text-white"
+                            href="/html/aboba.html"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            руководство пользователя
+                        </a>
+                    </div>
                 </form>
             </div>
         </div>

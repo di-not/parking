@@ -38,13 +38,14 @@ export default function DashboardPage() {
                     className="flex gap-5 mb-5  bg-black/30 p-2.5 px-6 rounded-full h-20 shadow-[0px_3px_4px_0px_rgba(0,0,0,0.25)] 
                 inset-shadow-[0px_0px_12px_2px_rgba(255,255,255,0.20)] justify-between items-center"
                 >
-                    <button
+                    
+                     <button
                         onClick={handleBack}
                         className=" text-white 
-                text-[20px] font-medium bg-white/30 w-[50px] rounded-full h-[50px] shadow-[0px_3px_8px_0px_rgba(0,0,0,0.20)] 
+                text-[20px] font-medium bg-white/30 w-fit px-4 rounded-full h-[50px] shadow-[0px_3px_8px_0px_rgba(0,0,0,0.20)] 
             inset-shadow-[0px_0px_10px_7px_rgba(255,255,255,0.25)] "
                     >
-                        ← 
+                       ← Работа с парковками
                     </button>
                     <Link
                         href="/admin/create_manager"
@@ -63,6 +64,7 @@ export default function DashboardPage() {
 
 const List = ({ data }: any) => {
     const [array, setArray] = useState<ManagerType[]>(data ? data : []);
+    const router = useRouter();
     const onDelete = async (id: number) => {
         const res = await $api.delete(`manager/${id}`);
         setArray(
@@ -70,6 +72,9 @@ const List = ({ data }: any) => {
                 return e.manager_id != id;
             })
         );
+    };
+    const onEdit = (id: number) => {
+        router.push(`/admin/edit_manager/${id}`);
     };
 
     return (
@@ -91,7 +96,9 @@ const List = ({ data }: any) => {
                     <div className="flex gap-5 py-8 border-l-1 border-white/30 pl-5 justify-end">
                         <button
                             className="rounded-full border-white/30 p-1 border-[1px] "
-                            onClick={() => {}}
+                            onClick={() => {
+                                onEdit(element.manager_id);
+                            }}
                         >
                             <Image src={edit} width={25} height={25} alt="" />
                         </button>

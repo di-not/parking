@@ -7,6 +7,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 export default function SimulationPage() {
     const { simulation } = useReduxStates();
+    
     const socketRef = useRef<any>(null);
 
     const [socketStatus, setSocketStatus] = useState<Statuses>(
@@ -43,12 +44,14 @@ export default function SimulationPage() {
         socketRef.current.onclose = () => {
             console.log("WebSocket disconnected");
         };
+
+        
     }, []);
 
     if (socketStatus === Statuses.LOADING) return <></>;
     if (socketStatus === Statuses.ERROR) return <>ошибка</>;
     return (
-        <div className="w-full justify-center items-center flex">
+        <div className="w-full justify-center items-center flex mt-10 mb-20">
             <div className="container">
                 <SimulationPageComponent socketRef={socketRef} />
             </div>

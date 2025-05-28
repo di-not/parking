@@ -9,7 +9,12 @@ import {
 } from "../slices/topology.slice";
 import { fetchParkings } from "../slices/parkings.slice";
 import { setSearch } from "../slices/searchParams.slice";
-import { setSimulation, setSimulationConfig, setSimulationTopology  } from "../slices/simulation.slice";
+import {
+    setSimulation,
+    setSimulationConfig,
+    setSimulationTopology,
+    setInitial,
+} from "../slices/simulation.slice";
 import { setAuth, setRole } from "../slices/auth.slice";
 
 const rootActions = {
@@ -19,7 +24,11 @@ const rootActions = {
     setSearch,
     fetchParkings,
     setAuth,
-    setRole,setSimulation, setSimulationConfig, setSimulationTopology 
+    setRole,
+    setSimulation,
+    setSimulationConfig,
+    setSimulationTopology,
+    setInitial,
 };
 
 export const useActions = () => {

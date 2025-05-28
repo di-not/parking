@@ -61,10 +61,10 @@ const Park: React.FC<ParkProps> = () => {
                 <button
                     onClick={handleBack}
                     className=" text-white 
-                text-[30px] font-medium bg-white/30 max-w-[70px] w-full rounded-full h-[70px] shadow-[0px_3px_8px_0px_rgba(0,0,0,0.20)] 
-            inset-shadow-[0px_0px_10px_7px_rgba(255,255,255,0.25)] "
+                text-[30px] font-medium bg-white/30  rounded-full h-[70px] w-[70px] shadow-[0px_3px_8px_0px_rgba(0,0,0,0.20)] 
+            inset-shadow-[0px_0px_10px_7px_rgba(255,255,255,0.25)] px-4"
                 >
-                    ←
+                    ← 
                 </button>
                 <div
                     className=" w-full flex gap-5 mb-5 bg-white/30 p-2.5 pl-4 rounded-full shadow-[0px_3px_8px_0px_rgba(0,0,0,0.20)] 

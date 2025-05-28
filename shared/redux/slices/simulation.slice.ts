@@ -12,7 +12,7 @@ const initialState: SimulationType = {
         height: 4,
         day_tariff: 0,
         night_tariff: 0,
-        manager:{id: 0},
+        manager: { id: 0 },
         cells: [],
     },
     arrival_config: {
@@ -29,6 +29,17 @@ const simulationSlice = createSlice({
     name: "Simulation",
     initialState,
     reducers: {
+        setInitial: (state) => {
+
+            state.arrival_config = {
+                type: "normal",
+                parking_prob: 0,
+            };
+
+            state.parking_time_config = {
+                type: "normal",
+            };
+        },
         setSimulation: (state, { payload }: PayloadAction<SimulationType>) => {
             state = payload;
         },
@@ -39,8 +50,8 @@ const simulationSlice = createSlice({
             state.parking = payload;
             state.parking.height = payload.cells.length;
             state.parking.width = payload.cells[0].length;
-            state.parking.day_tariff = 9
-            state.parking.night_tariff= 8
+            state.parking.day_tariff = 9;
+            state.parking.night_tariff = 8;
         },
         setSimulationConfig: (
             state,
@@ -52,6 +63,10 @@ const simulationSlice = createSlice({
         },
     },
 });
-export const { setSimulation, setSimulationConfig, setSimulationTopology } =
-    simulationSlice.actions;
+export const {
+    setSimulation,
+    setSimulationConfig,
+    setSimulationTopology,
+    setInitial,
+} = simulationSlice.actions;
 export default simulationSlice.reducer;
